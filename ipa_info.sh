@@ -12,8 +12,8 @@ show_usage() {
 
 function ipa_info()
 {
-  echo "copy $app"
-  cp -P $app ./info-app.ipa
+  echo "copy $1"
+  cp -P $1 ./info-app.ipa
   unzip info-app.ipa
 
   expirationDate=`/usr/libexec/PlistBuddy -c 'Print DeveloperCertificates:0' /dev/stdin <<< $(security cms -D -i Payload/*.app/embedded.mobileprovision) | openssl x509 -inform DER -noout -enddate | sed -e 's#notAfter=##'`
@@ -27,8 +27,6 @@ function ipa_info()
 
   uuidMobileProvision=`/usr/libexec/PlistBuddy -c 'Print UUID' /dev/stdin <<< $(security cms -D -i Payload/*.app/embedded.mobileprovision)`
 
-  echo "Mobile provisioning expiration: $expirationMobileProvision"
-
   rm -rf Payload
   rm info-app.ipa
 }
@@ -39,7 +37,7 @@ fi
 
 echo
 echo "App Info"
-ipa_info
+ipa_info $app
 echo
 echo "Firmado por: $certificateSubject"
 echo "Certificado de distribución válido hasta: $expirationDate"
