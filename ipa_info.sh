@@ -12,9 +12,8 @@ show_usage() {
 
 function ipa_info()
 {
-  echo "copy $1"
   cp -P $1 ./info-app.ipa
-  unzip info-app.ipa
+  unzip info-app.ipa > /dev/null
 
   expirationDate=`/usr/libexec/PlistBuddy -c 'Print DeveloperCertificates:0' /dev/stdin <<< $(security cms -D -i Payload/*.app/embedded.mobileprovision) | openssl x509 -inform DER -noout -enddate | sed -e 's#notAfter=##'`
 
