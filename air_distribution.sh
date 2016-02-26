@@ -52,8 +52,10 @@ function ipa_info()
   artifacts_url="$url/$app_url/ios/$short_version_string/$environment"
   git_revision=`git rev-parse --short HEAD`
 
-  cp -f Payload/*.app/AppIcon40x40@2x.png $ci_dir/icon-1.png
-  cp -f Payload/*.app/AppIcon60x60@2x.png $ci_dir/icon-2.png
+  xcrun -sdk iphoneos pngcrush \
+ -revert-iphone-optimizations -q Payload/*.app/AppIcon40x40@2x.png $ci_dir/icon-1.png
+  xcrun -sdk iphoneos pngcrush \
+ -revert-iphone-optimizations -q Payload/*.app/AppIcon60x60@2x.png $ci_dir/icon-2.png
 
   echo "Firmado por: $certificateSubject"
   echo "Certificado de distribución válido hasta: $expirationDate"
