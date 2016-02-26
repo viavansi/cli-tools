@@ -264,7 +264,7 @@ function distribute_app()
     echo "Create OTA URL: $artifacts_url"
 }
 
-if [ "$#" -ne 4 ]; then
+if [ "$#" -ne 5 ]; then
     show_usage
 else
   echo
