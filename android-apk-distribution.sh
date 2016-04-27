@@ -46,7 +46,7 @@ function set_environment()
   package_name=$(aapt dump badging $apk | grep -Eo "package: name=\'.+?\'" | cut -d"=" -f2 | grep -Eo "[0-9A-Za-z\.]+")
   apk_name=$($apk | grep -o '[^/]*$')
 
-  app_name=$(aapt d --values badging app-tigodocsDev-release.apk  | sed -n "/^application: /s/.*label='\([^']*\).*/\1/p")
+  app_name=$(aapt d --values badging $apk | sed -n "/^application: /s/.*label='\([^']*\).*/\1/p")
   scheme=$($app_name | tr -d " \t\n\r" | tr '[:upper:]' '[:lower:]')
 
   if [ "$developer" == "" ]; then
