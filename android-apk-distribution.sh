@@ -65,7 +65,6 @@ function set_environment()
 
   git_revision=`git rev-parse --short HEAD`
 
-
   artifacts_url="$url/$scheme/$os/$short_version_string/$environment"
 
   echo "Environment: $environment"
@@ -188,7 +187,7 @@ function build_ota_page()
     <div id="wrapper">
       <span class="icon"></span>
       <h1>$app_name <span>Versión $short_version_string - $git_revision</span></h1>
-      <a href=\"$artifacts_url/$apk_name\">Instalar aplicación</a>
+      <a href=$artifacts_url/$apk_name>Instalar aplicación</a>
       <ul style="font-size: 11px;color: gray;">
       <li>Sistema operativo: $os</li>
       <li>Código de aplicación: $package_name</li>
