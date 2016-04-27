@@ -44,10 +44,10 @@ function set_environment()
   short_version_string=$(aapt dump badging $apk | grep -Eo "versionName=\'.*?\'" | cut -d"=" -f2 | cut -d"-" -f1 | grep -Eo "[0-9\.]+")
   version_code=$(aapt dump badging $apk | grep -Eo "versionCode=\'.*?\'" | cut -d"=" -f2 | grep -Eo "[0-9]+")
   package_name=$(aapt dump badging $apk | grep -Eo "package: name=\'.+?\'" | cut -d"=" -f2 | grep -Eo "[0-9A-Za-z\.]+")
-  apk_name=$($apk | grep -o '[^/]*$')
+  apk_name=$(echo $apk | grep -o '[^/]*$')
 
   app_name=$(aapt d --values badging $apk | sed -n "/^application: /s/.*label='\([^']*\).*/\1/p")
-  scheme=$($app_name | tr -d " \t\n\r" | tr '[:upper:]' '[:lower:]')
+  scheme=$(echo $app_name | tr -d " \t\n\r" | tr '[:upper:]' '[:lower:]')
 
   if [ "$developer" == "" ]; then
     developer="Viafirma"
