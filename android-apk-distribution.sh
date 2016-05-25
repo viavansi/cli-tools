@@ -7,6 +7,7 @@ environment=$2
 url=$3
 out=$4
 developer=$5
+scheme=$6
 
 # Configuration
 project_dir=`pwd`
@@ -47,7 +48,10 @@ function set_environment()
   apk_name=$(echo $apk | grep -o '[^/]*$')
 
   app_name=$(aapt d --values badging $apk | sed -n "/^application: /s/.*label='\([^']*\).*/\1/p")
-  scheme=$(echo $app_name | tr -d " \t\n\r" | tr '[:upper:]' '[:lower:]')
+
+  if [ "$scheme" == "" ]; then
+    scheme=$(echo $app_name | tr -d " \t\n\r" | tr '[:upper:]' '[:lower:]')
+  fi
 
   if [ "$developer" == "" ]; then
     developer="Viafirma"
