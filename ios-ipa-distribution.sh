@@ -37,7 +37,7 @@ function ipa_info()
   certificateSubject=`/usr/libexec/PlistBuddy -c 'Print DeveloperCertificates:0' /dev/stdin <<< $(security cms -D -i Payload/*.app/embedded.mobileprovision) | openssl x509 -inform DER -noout -subject`
 
   cert_uid=`echo $certificateSubject | cut -d \/ -f 2 | cut -d \= -f 2`
-  cert_o=`echo $certificateSubject | cut -d \/ -f 4 | cut -d \= -f 2`  certificateSubject="$cert_o ($cert_uid)"
+  cert_o=`echo $certificateSubject | cut -d \/ -f 3 | cut -d \= -f 2`  certificateSubject="$cert_o ($cert_uid)"
 
   expirationMobileProvision=`/usr/libexec/PlistBuddy -c 'Print ExpirationDate' /dev/stdin <<< $(security cms -D -i Payload/*.app/embedded.mobileprovision)`
 
