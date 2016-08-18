@@ -48,7 +48,7 @@ function jenkins_summary()
   echo "Write ipa_info_jenkins_summary.xml"
   cat << EOF > ipa_info_jenkins_summary.xml
 <?xml version="1.0" encoding="UTF-8"?>
-<section name="App Info Summary" fontcolor="#ffffff">
+<section name="App Info Summary" fontcolor="#3D3D3D">
 <field name="Nombre" value="$appName">
 </field>
 <field name="Versión" value="$version">

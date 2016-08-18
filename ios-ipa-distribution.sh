@@ -272,12 +272,8 @@ function jenkins_summary()
   echo "Write jenkins_summary.xml"
   cat << EOF > ipa_distribution_jenkins_summary.xml
 <?xml version="1.0" encoding="UTF-8"?>
-<section name="Air Distribution Summary" fontcolor="#ffffff">
-<field name="App" value="$app_name">
-</field>
-<field name="Versión" value="$short_version_string - $git_revision">
-</field>
-<field name="URL de instalación">
+<section name="Air Distribution Summary" fontcolor="#3D3D3D">
+<field name="Información para la distribución">
 <![CDATA[
   <a href="$artifacts_url">URL de instalación</a>
   <a href="$artifacts_url/app.ipa">URL de descarga del .ipa</a>
