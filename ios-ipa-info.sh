@@ -30,6 +30,26 @@ function ipa_info()
   rm info-app.ipa
 }
 
+function jenkins_summary()
+{
+  #https://wiki.jenkins-ci.org/display/JENKINS/Summary+Display+Plugin
+  echo "Write jenkins_summary.xml"
+  cat << EOF > jenkins_summary.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Jenkins Summary" fontcolor="#ffffff">
+<field name="Firmado por:" value="$certificateSubject">
+</field>
+<field name="Certificado de distribución válido hasta:" value="$expirationDate">
+</field>
+<field name="Mobile Provision UUID:" value="$uuidMobileProvision">
+</field>
+<field name="Mobile Provision válido hasta:" value="$expirationMobileProvision">
+</field>
+</section>
+
+EOF
+}
+
 if [ ${#@} != 1 ]; then
     show_usage
 fi
@@ -42,3 +62,5 @@ echo "Firmado por: $certificateSubject"
 echo "Certificado de distribución válido hasta: $expirationDate"
 echo "Mobile Provision UUID: $uuidMobileProvision"
 echo "Mobile Provision válido hasta: $expirationMobileProvision"
+
+jenkins_summary
