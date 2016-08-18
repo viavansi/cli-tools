@@ -50,7 +50,7 @@ function ipa_info()
   app_name=$(/usr/libexec/PlistBuddy -c "Print :CFBundleDisplayName" "$info_plist_domain")
   app_url=`echo $app_name | tr "[:upper:]" "[:lower:]" | tr -d ' '`
   artifacts_url="$url/$app_url/ios/$short_version_string/$environment"
-  git_revision=`git rev-parse --short HEAD`
+  git_revision=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$info_plist_domain")
 
   xcrun -sdk iphoneos pngcrush \
  -revert-iphone-optimizations -q Payload/*.app/AppIcon40x40@2x.png $ci_dir/icon-1.png
