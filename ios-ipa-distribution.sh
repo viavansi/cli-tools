@@ -266,6 +266,28 @@ function distribute_app()
     echo "Create OTA URL: $artifacts_url"
 }
 
+function jenkins_summary()
+{
+  #https://wiki.jenkins-ci.org/display/JENKINS/Summary+Display+Plugin
+  echo "Write jenkins_summary.xml"
+  cat << EOF > ipa_distribution_jenkins_summary.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Air Distribution Summary" fontcolor="#ffffff">
+<field name="App" value="$app_name">
+</field>
+<field name="Versión" value="$short_version_string - $git_revision">
+</field>
+<field name="URL de instalación">
+<![CDATA[
+  <a href="$artifacts_url">URL de instalación</a>
+  <a href="$artifacts_url/app.ipa">URL de descarga del .ipa</a>
+ ]]>
+</field>
+</section>
+
+EOF
+}
+
 if [ "$#" -ne 5 ]; then
     show_usage
 else
@@ -275,4 +297,5 @@ else
   build_ota_plist
   build_ota_page
   distribute_app
+  jenkins_summary
 fi

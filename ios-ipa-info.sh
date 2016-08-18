@@ -34,16 +34,16 @@ function jenkins_summary()
 {
   #https://wiki.jenkins-ci.org/display/JENKINS/Summary+Display+Plugin
   echo "Write jenkins_summary.xml"
-  cat << EOF > jenkins_summary.xml
+  cat << EOF > ipa_info_jenkins_summary.xml
 <?xml version="1.0" encoding="UTF-8"?>
-<section name="Jenkins Summary" fontcolor="#ffffff">
-<field name="Firmado por:" value="$certificateSubject">
+<section name="App Info Summary" fontcolor="#ffffff">
+<field name="Firmado por" value="$certificateSubject">
 </field>
-<field name="Certificado de distribución válido hasta:" value="$expirationDate">
+<field name="Certificado de distribución válido hasta" value="$expirationDate">
 </field>
-<field name="Mobile Provision UUID:" value="$uuidMobileProvision">
+<field name="Mobile Provision UUID" value="$uuidMobileProvision">
 </field>
-<field name="Mobile Provision válido hasta:" value="$expirationMobileProvision">
+<field name="Mobile Provision válido hasta" value="$expirationMobileProvision">
 </field>
 </section>
 
