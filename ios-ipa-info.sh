@@ -26,13 +26,17 @@ function ipa_info()
 
   uuidMobileProvision=`/usr/libexec/PlistBuddy -c 'Print UUID' /dev/stdin <<< $(security cms -D -i Payload/*.app/embedded.mobileprovision)`
 
-  appVersion=`/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' /dev/stdin <<< $(security cms -D -i Payload/*.app/Info.plist)`
+  app_nm=`ls Payload/`
 
-  buildVersion=`/usr/libexec/PlistBuddy -c 'Print CFBundleVersion' /dev/stdin <<< $(security cms -D -i Payload/*.app/Info.plist)`
+  appName=`/usr/libexec/PlistBuddy -c 'Print CFBundleDisplayName' "Payload/$app_nm/Info.plist"`
+
+  appVersion=`/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' "Payload/$app_nm/Info.plist"`
+
+  buildVersion=`/usr/libexec/PlistBuddy -c 'Print CFBundleVersion' "Payload/$app_nm/Info.plist"`
 
   version="$appVersion - $buildVersion"
 
-  bundleId=`/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' /dev/stdin <<< $(security cms -D -i Payload/*.app/Info.plist)`
+  bundleId=`/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "Payload/$app_nm/Info.plist"`
 
   rm -rf Payload
   rm info-app.ipa
@@ -41,11 +45,13 @@ function ipa_info()
 function jenkins_summary()
 {
   #https://wiki.jenkins-ci.org/display/JENKINS/Summary+Display+Plugin
-  echo "Write jenkins_summary.xml"
+  echo "Write ipa_info_jenkins_summary.xml"
   cat << EOF > ipa_info_jenkins_summary.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="App Info Summary" fontcolor="#ffffff">
-<field name="Version" value="$version">
+<field name="Nombre" value="$appName">
+</field>
+<field name="Versión" value="$version">
 </field>
 <field name="App ID" value="$bundleId">
 </field>
@@ -70,7 +76,8 @@ echo
 echo "App Info"
 ipa_info $app
 echo
-echo "Version: $version"
+echo "Nombre: $appName"
+echo "Versión: $version"
 echo "App ID: $bundleId"
 echo "Firmado por: $certificateSubject"
 echo "Certificado de distribución válido hasta: $expirationDate"
