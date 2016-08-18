@@ -26,6 +26,14 @@ function ipa_info()
 
   uuidMobileProvision=`/usr/libexec/PlistBuddy -c 'Print UUID' /dev/stdin <<< $(security cms -D -i Payload/*.app/embedded.mobileprovision)`
 
+  appVersion=`/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' /dev/stdin <<< $(security cms -D -i Payload/*.app/Info.plist)`
+
+  buildVersion=`/usr/libexec/PlistBuddy -c 'Print CFBundleVersion' /dev/stdin <<< $(security cms -D -i Payload/*.app/Info.plist)`
+
+  version="$appVersion - $buildVersion"
+
+  bundleId=`/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' /dev/stdin <<< $(security cms -D -i Payload/*.app/Info.plist)`
+
   rm -rf Payload
   rm info-app.ipa
 }
@@ -37,6 +45,10 @@ function jenkins_summary()
   cat << EOF > ipa_info_jenkins_summary.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="App Info Summary" fontcolor="#ffffff">
+<field name="Version" value="$version">
+</field>
+<field name="App ID" value="$bundleId">
+</field>
 <field name="Firmado por" value="$certificateSubject">
 </field>
 <field name="Certificado de distribución válido hasta" value="$expirationDate">
@@ -58,6 +70,8 @@ echo
 echo "App Info"
 ipa_info $app
 echo
+echo "Version: $version"
+echo "App ID: $bundleId"
 echo "Firmado por: $certificateSubject"
 echo "Certificado de distribución válido hasta: $expirationDate"
 echo "Mobile Provision UUID: $uuidMobileProvision"
