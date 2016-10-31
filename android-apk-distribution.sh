@@ -221,8 +221,8 @@ function distribute_app()
 
 function clean_up() {
     rm -rf ./apk_zip
-    rm -f $project_dir/index.html
-    rm -f $project_dir/icon.png
+    rm -rf $project_dir/index.html
+    rm -rf $project_dir/icon.png
 }
 
 function f_gradle() {
@@ -245,7 +245,7 @@ function f_gradle() {
 function f_image_apk() {
     unzip -o -d ./apk_zip $apk
     image_folder=$(aapt d --values badging $apk | sed -n "/^application: /s/.*icon='\([^']*\).*/\1/p")
-    mv ./apk_zip/$image_folder $project_dir/icon.png
+    cp ./apk_zip/$image_folder $project_dir/icon.png
 }
 
 echo
