@@ -48,10 +48,10 @@ function resign_app()
   echo "re-sign"
   if [ $entitlements != '' ]; then
     echo "resign with $entitlements"
-    /usr/bin/codesign -f -s "iPhone Distribution: $cetificate" --entitlements="$entitlements" --resource-rules "Payload/$target/ResourceRules.plist" "Payload/$target"
+    /usr/bin/codesign -f -s "iPhone Distribution: $cetificate" --entitlements="$entitlements" "Payload/$target"
   else
     echo "resign without entitlements.plist"
-    /usr/bin/codesign -f -s "iPhone Distribution: $cetificate" --resource-rules "Payload/$target/ResourceRules.plist" "Payload/$target"
+    /usr/bin/codesign -f -s "iPhone Distribution: $cetificate" "Payload/$target"
   fi
 
   echo "re-package"

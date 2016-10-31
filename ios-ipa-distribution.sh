@@ -37,7 +37,7 @@ function ipa_info()
   certificateSubject=`/usr/libexec/PlistBuddy -c 'Print DeveloperCertificates:0' /dev/stdin <<< $(security cms -D -i Payload/*.app/embedded.mobileprovision) | openssl x509 -inform DER -noout -subject`
 
   cert_uid=`echo $certificateSubject | cut -d \/ -f 2 | cut -d \= -f 2`
-  cert_o=`echo $certificateSubject | cut -d \/ -f 4 | cut -d \= -f 2`  certificateSubject="$cert_o ($cert_uid)"
+  cert_o=`echo $certificateSubject | cut -d \/ -f 3 | cut -d \= -f 2`  certificateSubject="$cert_o ($cert_uid)"
 
   expirationMobileProvision=`/usr/libexec/PlistBuddy -c 'Print ExpirationDate' /dev/stdin <<< $(security cms -D -i Payload/*.app/embedded.mobileprovision)`
 
@@ -50,7 +50,7 @@ function ipa_info()
   app_name=$(/usr/libexec/PlistBuddy -c "Print :CFBundleDisplayName" "$info_plist_domain")
   app_url=`echo $app_name | tr "[:upper:]" "[:lower:]" | tr -d ' '`
   artifacts_url="$url/$app_url/ios/$short_version_string/$environment"
-  git_revision=`git rev-parse --short HEAD`
+  git_revision=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$info_plist_domain")
 
   xcrun -sdk iphoneos pngcrush \
  -revert-iphone-optimizations -q Payload/*.app/AppIcon40x40@2x.png $ci_dir/icon-1.png
@@ -266,6 +266,24 @@ function distribute_app()
     echo "Create OTA URL: $artifacts_url"
 }
 
+function jenkins_summary()
+{
+  #https://wiki.jenkins-ci.org/display/JENKINS/Summary+Display+Plugin
+  echo "Write jenkins_summary.xml"
+  cat << EOF > ipa_distribution_jenkins_summary.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Air Distribution Summary" fontcolor="#3D3D3D">
+<field name="Información para la distribución">
+<![CDATA[
+  <a href="$artifacts_url">URL de instalación</a>
+  <a href="$artifacts_url/app.ipa">URL de descarga del .ipa</a>
+ ]]>
+</field>
+</section>
+
+EOF
+}
+
 if [ "$#" -ne 5 ]; then
     show_usage
 else
@@ -275,4 +293,5 @@ else
   build_ota_plist
   build_ota_page
   distribute_app
+  jenkins_summary
 fi
