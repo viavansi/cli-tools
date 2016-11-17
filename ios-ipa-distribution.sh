@@ -238,6 +238,7 @@ function build_ota_page()
       <h1>$app_name <span>Versión $short_version_string - $git_revision</span></h1>
       <a href="itms-services://?action=download-manifest&url=$artifacts_url/app.plist">Instalar aplicaci&oacute;n</a>
     <ul style="font-size: 11px;color: gray;">
+      <li><a href="http://doc.viafirma.com/documents/ios/ios_viafirma_dev_trusted.html">Ayuda para confiar en el certificado de distribución</a></li>
       <li>Aplicación compilada el: `date +%d/%m/%Y`</li>
       <li>Firmado por: $certificateSubject</li>
       <li>Certificado de distribución válido hasta: $expirationDate</li>
