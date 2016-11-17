@@ -218,7 +218,7 @@ function build_ota_page()
           text-align: center;
         }
         
-        a.info {
+        #wrapper a.info {
             background: none;
             color: #006DCC;
             box-shadow: none;
