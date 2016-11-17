@@ -218,7 +218,16 @@ function build_ota_page()
           text-align: center;
         }
         
-        #wrapper a.info, 
+        #wrapper a.info {
+          background: none;
+          color: #006DCC;
+          box-shadow: none;
+          font-size: 11px;
+          padding: 0;
+          margin: 0;
+          text-align: left;
+          text-shadow: none;  
+        }
         #wrapper a.info:focus, 
         #wrapper a.info:hover, 
         #wrapper a.info:active {
