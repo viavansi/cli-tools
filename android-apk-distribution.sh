@@ -1,5 +1,8 @@
 #!/bin/bash
 
+export PATH=$PATH:/Applications/android-sdk-macosx/platforms/android-6/tools/
+
+
 # Configuration
 program_name=$0
 apk=$1
