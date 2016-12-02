@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export PATH=$PATH:/Applications/android-sdk-macosx/platforms/android-6/tools/
+export PATH=$PATH:/Applications/android-sdk-macosx/build-tools/22.0.0
 
 
 # Configuration
