@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# aapt location, needed to extract the information from the apk. Depending of the aapt version, some steps may fail.
 export PATH=$PATH:/Applications/android-sdk-macosx/build-tools/22.0.0
 
 
