@@ -43,14 +43,14 @@ function set_environment()
 {
   #extract versionName from the AndroidManifest.xml file
   echo "Extracting information from $apk"
-  android_manifest=$(aapt dump badging $apk)
+  android_manifest=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt dump badging $apk)
 
-  short_version_string=$(aapt dump badging $apk | grep -Eo "versionName=\'.*?\'" | cut -d"=" -f2 | cut -d"-" -f1 | grep -Eo "[0-9\.]+")
-  version_code=$(aapt dump badging $apk | grep -Eo "versionCode=\'.*?\'" | cut -d"=" -f2 | grep -Eo "[0-9]+")
-  package_name=$(aapt dump badging $apk | grep -Eo "package: name=\'.+?\'" | cut -d"=" -f2 | grep -Eo "[0-9A-Za-z\.]+")
+  short_version_string=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt dump badging $apk | grep -Eo "versionName=\'.*?\'" | cut -d"=" -f2 | cut -d"-" -f1 | grep -Eo "[0-9\.]+")
+  version_code=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt dump badging $apk | grep -Eo "versionCode=\'.*?\'" | cut -d"=" -f2 | grep -Eo "[0-9]+")
+  package_name=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt dump badging $apk | grep -Eo "package: name=\'.+?\'" | cut -d"=" -f2 | grep -Eo "[0-9A-Za-z\.]+")
   apk_name=$(echo $apk | grep -o '[^/]*$')
 
-  app_name=$(aapt d --values badging $apk | sed -n "/^application: /s/.*label='\([^']*\).*/\1/p")
+  app_name=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt d --values badging $apk | sed -n "/^application: /s/.*label='\([^']*\).*/\1/p")
 
   if [ "$scheme" == "" ]; then
     scheme=$(echo $app_name | tr -d " \t\n\r" | tr '[:upper:]' '[:lower:]')
@@ -247,7 +247,7 @@ function f_gradle() {
 
 function f_image_apk() {
     unzip -o -d ./apk_zip $apk
-    image_folder=$(aapt d --values badging $apk | sed -n "/^application: /s/.*icon='\([^']*\).*/\1/p")
+    image_folder=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt d --values badging $apk | sed -n "/^application: /s/.*icon='\([^']*\).*/\1/p")
     cp ./apk_zip/$image_folder $project_dir/icon.png
 }
 
