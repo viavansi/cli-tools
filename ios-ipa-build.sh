@@ -18,10 +18,9 @@ echo "Codesign as \"$certificate\", embedding provisioning profile $profile"
 
 xcodebuild -workspace $workspace -scheme $scheme -sdk "iphoneos" -configuration Distribution CODE_SIGN_IDENTITY="$certificate" PROVISIONING_PROFILE="$profile" OTHER_CODE_SIGN_FLAGS="--keychain $keychain" -archivePath app.xcarchive archive
 
-xcodebuild -exportArchive -exportFormat ipa -archivePath app.xcarchive -exportPath ./app.ipa
+xcodebuild -exportArchive -exportFormat ipa -archivePath app.xcarchive -exportPath ./app_temp.ipa
 
 rm -rf app.xcarchive
-mv app.ipa $dest
-rm app.ipa
+mv app_temp.ipa $dest
 
 cd $current
