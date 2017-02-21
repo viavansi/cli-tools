@@ -24,7 +24,8 @@ releases_dir=${8}
 target=${9}
 environment=${10}
 
-devired_data_path="/tmp/DerivedData"
+#devired_data_path="/tmp/DerivedData"
+devired_data_path="$HOME/Library/Developer/Xcode/DerivedData"
 
 function failed()
 {
