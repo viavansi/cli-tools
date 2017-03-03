@@ -21,11 +21,9 @@ certificate=${5}
 app_plist=${6}
 mobileprovision=${7}
 releases_dir=${8}
-target=${9}
-environment=${10}
 
 #devired_data_path="/tmp/DerivedData"
-devired_data_path="$HOME/Library/Developer/Xcode/DerivedData"
+devired_data_path="$releases_dir/DerivedData"
 
 function failed()
 {
@@ -68,7 +66,7 @@ function set_environment()
   info_plist_domain=$(ls $app_plist | sed -e 's/\.plist//')
   short_version_string=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$app_plist")
   bundle_identifier=$(/usr/libexec/PlistBuddy -c "Print CFBundleDisplayName" "$app_plist")
-  echo "$bundle_identifier ($environment) version $short_version_string"
+  echo "$bundle_identifier ($scheme) version $short_version_string"
 }
 
 function build_app()
@@ -76,7 +74,7 @@ function build_app()
   #build the app
   echo "Running xcodebuild ..."
 
-  xcodebuild -workspace "$workspace" -scheme "$scheme" -sdk iphoneos -resource-rules='$(SDKROOT)/ResourceRules.plist' -configuration Release clean build >| xcodebuild_output
+  xcodebuild -workspace "$workspace" -scheme "$scheme" -sdk iphoneos -resource-rules='$(SDKROOT)/ResourceRules.plist' -configuration Release -derivedDataPath "$devired_data_path" clean build >| xcodebuild_output
 
   if [ $? -ne 0 ]
   then
@@ -136,7 +134,7 @@ function verify_app()
 {
   #verify the resulting app
   codesign -d -vvv --file-list - "$releases_dir/$project_app" || failed verification
-  mv $releases_dir/app.ipa $releases_dir/$target-$short_version_string-$environment.ipa
+  mv $releases_dir/app.ipa $releases_dir/$scheme-$short_version_string.ipa
   rm -rf $releases_dir/$project_app
   rm -rf $releases_dir/$project_app.dSYM
 }
