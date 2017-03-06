@@ -61,7 +61,7 @@ function resign_app()
   #echo "remove unzip folder"
   rm -rf Payload > /dev/null
 
-  echo "ReSign Complete!"
+  #echo "ReSign Complete!"
 }
 
 function app_backup()
@@ -78,8 +78,11 @@ if [ "$#" -lt 3 ]; then
     show_usage
 else
   echo
-  echo "ReSign App $app with $cetificate"
-  app_backup
+  echo "....... ReSign ......."
+  echo
+  #app_backup
   resign_app
+  echo "......................"
+  echo
   echo
 fi
