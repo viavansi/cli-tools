@@ -133,7 +133,8 @@ function sign_app()
 function verify_app()
 {
   #verify the resulting app
-  codesign -d -vvv --file-list - "$releases_dir/$project_app" || failed verification
+  codesign -d --ent :- "$releases_dir/$project_app"
+  codesign -d -vvv --ent --file-list - "$releases_dir/$project_app" || failed verification
   mv $releases_dir/app.ipa $releases_dir/$scheme-$short_version_string.ipa
   rm -rf $releases_dir/$project_app
   rm -rf $releases_dir/$project_app.dSYM
