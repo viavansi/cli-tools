@@ -26,7 +26,7 @@ function show_usage() {
 function resign_app()
 {
   echo "unzip app.ipa"
-  unzip "$app"
+  unzip "$app" > /dev/null
   target=`ls Payload`
 
   echo "remove old CodeSignature"
@@ -55,11 +55,11 @@ function resign_app()
   fi
 
   echo "re-package"
-  zip -qr "app-resigned.ipa" Payload
-  mv "app-resigned.ipa" "$app"
+  zip -qr "app-resigned.ipa" Payload > /dev/null
+  mv "app-resigned.ipa" "$app" > /dev/null
 
   echo "remove unzip folder"
-  rm -rf Payload
+  rm -rf Payload > /dev/null
 
   echo "ReSign Complete!"
 }
