@@ -63,11 +63,9 @@ function ipa_info()
   echo "Mobile Provision válido hasta: $expirationMobileProvision"
 
   echo "Environment for $bundle_identifier at version $short_version_string"
-  echo "App URL: $app_url"
+  #echo "App URL: $app_url"
   echo "Git Revision: $git_revision"
-  echo
-  echo "OTA Title: $app_name"
-  echo "OTA URL: $artifacts_url"
+  echo "$app_name: $artifacts_url"
 
   rm -rf Payload
   rm info-app.ipa
@@ -75,7 +73,7 @@ function ipa_info()
 
 function build_ota_plist()
 {
-  echo "Generating app.plist"
+  #echo "Generating app.plist"
   cat << EOF > $ci_dir/app.plist
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -131,7 +129,7 @@ EOF
 
 function build_ota_page()
 {
-  echo "Generating index.html"
+  #echo "Generating index.html"
   cat << EOF > $ci_dir/index.html
   <!DOCTYPE html>
   <html>
@@ -282,13 +280,13 @@ function distribute_app()
     cp -f $ci_dir/icon-2.png $out/$app_url/ios/$short_version_string/$environment/icon-2.png
     rm $ci_dir/app.plist
     rm $ci_dir/index.html
-    echo "Create OTA URL: $artifacts_url"
+    #echo "Create OTA URL: $artifacts_url"
 }
 
 function jenkins_summary()
 {
   #https://wiki.jenkins-ci.org/display/JENKINS/Summary+Display+Plugin
-  echo "Write jenkins_summary.xml"
+  #echo "Write jenkins_summary.xml"
   cat << EOF > ipa_distribution_jenkins_summary.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Air Distribution Summary" fontcolor="#3D3D3D">
@@ -307,10 +305,13 @@ if [ "$#" -ne 5 ]; then
     show_usage
 else
   echo
-  echo "Get ipa info"
+  echo "....... Distribution Info ......."
+  echo
   ipa_info $ipa
   build_ota_plist
   build_ota_page
   distribute_app
   jenkins_summary
+  echo
+  echo "................................."
 fi

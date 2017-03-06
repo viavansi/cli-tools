@@ -40,7 +40,7 @@ function resign_app()
     /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $bundle_id" "Payload/$target/Info.plist"
   fi
 
-  if [ $version != '' ]; then
+  if [ $version ]; then
     echo "change the version to $version"
     /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $version" "Payload/$target/Info.plist"
   fi
