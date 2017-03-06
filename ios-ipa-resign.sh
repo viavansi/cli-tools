@@ -25,11 +25,11 @@ function show_usage() {
 
 function resign_app()
 {
-  echo "unzip app.ipa"
+  #echo "unzip app.ipa"
   unzip "$app" > /dev/null
   target=`ls Payload`
 
-  echo "remove old CodeSignature"
+  #echo "remove old CodeSignature"
   rm -r "Payload/$target/_CodeSignature" "Payload/$target/CodeResources" 2> /dev/null | true
 
   echo "replace embedded mobile provisioning profile"
@@ -45,7 +45,7 @@ function resign_app()
     /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $version" "Payload/$target/Info.plist"
   fi
 
-  echo "re-sign"
+  #echo "re-sign"
   if [ $entitlements != '' ]; then
     echo "resign with $entitlements"
     /usr/bin/codesign -f -s "iPhone Distribution: $cetificate" --entitlements="$entitlements" "Payload/$target"
@@ -54,11 +54,11 @@ function resign_app()
     /usr/bin/codesign -f -s "iPhone Distribution: $cetificate" "Payload/$target"
   fi
 
-  echo "re-package"
+  #echo "re-package"
   zip -qr "app-resigned.ipa" Payload > /dev/null
   mv "app-resigned.ipa" "$app" > /dev/null
 
-  echo "remove unzip folder"
+  #echo "remove unzip folder"
   rm -rf Payload > /dev/null
 
   echo "ReSign Complete!"
@@ -71,14 +71,14 @@ function app_backup()
   fileNameCopy="app_backup_$timestamp.ipa"
   backup=`echo ${app//$fileName/$fileNameCopy}`
   cp "$app" "$backup"
-  echo "copy $app in $backup"
+  #echo "copy $app in $backup"
 }
 
 if [ "$#" -lt 3 ]; then
     show_usage
 else
   echo
-  echo "ReSign App $app"
+  echo "ReSign App $app with $cetificate"
   app_backup
   resign_app
   echo
