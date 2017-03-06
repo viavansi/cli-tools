@@ -32,9 +32,9 @@ function ipa_info()
   cp -P $1 ./info-app.ipa
   unzip info-app.ipa > /dev/null
 
-  expirationDate=`/usr/libexec/PlistBuddy -c 'Print DeveloperCertificates:0' /dev/stdin <<< $(security cms -D -i Payload/*.app/embedded.mobileprovision) | openssl x509 -inform DER -noout -enddate | sed -e 's#notAfter=##'`
+  expirationDate=`/usr/libexec/PlistBuddy -c 'Print DeveloperCertificates:0' /dev/stdin <<< $(security cms -D -i Payload/*.app/embedded.mobileprovision 2> /dev/null) | openssl x509 -inform DER -noout -enddate | sed -e 's#notAfter=##'`
 
-  certificateSubject=`/usr/libexec/PlistBuddy -c 'Print DeveloperCertificates:0' /dev/stdin <<< $(security cms -D -i Payload/*.app/embedded.mobileprovision) | openssl x509 -inform DER -noout -subject`
+  certificateSubject=`/usr/libexec/PlistBuddy -c 'Print DeveloperCertificates:0' /dev/stdin <<< $(security cms -D -i Payload/*.app/embedded.mobileprovision 2> /dev/null) | openssl x509 -inform DER -noout -subject`
 
   cert_uid=`echo $certificateSubject | cut -d \/ -f 2 | cut -d \= -f 2`
   cert_o=`echo $certificateSubject | cut -d \/ -f 3 | cut -d \= -f 2`  certificateSubject="$cert_o ($cert_uid)"
