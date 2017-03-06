@@ -78,7 +78,7 @@ function build_app()
 
   if [ $? -ne 0 ]
   then
-    tail -n20 xcodebuild_output
+    cat xcodebuild_output
     failed xcodebuild
   fi
 
