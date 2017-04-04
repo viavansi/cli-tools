@@ -74,7 +74,9 @@ function archive_app()
 {
   echo "Archive as \"$certificate\", embedding provisioning profile $mobileprovision ..."
 
-  xcodebuild -workspace $workspace -scheme $scheme -sdk "iphoneos" -configuration Distribution CODE_SIGN_IDENTITY="$certificate" PROVISIONING_PROFILE="$mobileprovision" OTHER_CODE_SIGN_FLAGS="--keychain $keychain" -archivePath app.xcarchive archive >| output
+#PROVISIONING_PROFILE="$mobileprovision"
+
+  xcodebuild -workspace $workspace -scheme $scheme -sdk "iphoneos" -configuration Distribution CODE_SIGN_IDENTITY="$certificate" OTHER_CODE_SIGN_FLAGS="--keychain $keychain" -archivePath app.xcarchive archive >| output
 
   if [ $? -ne 0 ]
   then
