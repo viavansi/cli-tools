@@ -108,7 +108,7 @@ function check_ipa()
   cp $releases_dir/$scheme.ipa $releases_dir/$scheme-$short_version_string.ipa
 
   mv $releases_dir/$scheme.ipa $releases_dir/$scheme.ipa
-  unzip $releases_dir/$scheme.ipa -d $releases_dir/
+  unzip -qq $releases_dir/$scheme.ipa -d $releases_dir/
   xcrun codesign -dv $releases_dir/Payload/documents.app >| output
 
   if [ $? -ne 0 ]
