@@ -107,8 +107,8 @@ function check_ipa()
 
   cp $releases_dir/$scheme.ipa $releases_dir/$scheme-$short_version_string.ipa
 
-  mv $releases_dir/$scheme.ipa $releases_dir/$scheme.ipa
-  unzip -qq $releases_dir/$scheme.ipa -d $releases_dir/
+  mv $releases_dir/$scheme.ipa $releases_dir/$scheme.zip
+  unzip -qq $releases_dir/$scheme.zip -d $releases_dir/
   xcrun codesign -dv $releases_dir/Payload/documents.app >| output
 
   if [ $? -ne 0 ]
@@ -119,6 +119,7 @@ function check_ipa()
 
   rm -rf output
   rm -rf app.xcarchive
+  rm -rf $releases_dir/$scheme.zip
   rm -rf $releases_dir/Payload
 }
 
