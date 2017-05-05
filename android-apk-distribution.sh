@@ -178,8 +178,15 @@ header a {
   margin-top: 30px;
   margin-bottom: -5px;
 }
+.splash {
+  position: absolute;
+  height: auto;
+  top: 297px;
+  margin-left: 5.5px;
+  width: 145px;
+}
 .download {
-  background: #fafafa;
+  background: #fff;
   border-radius: 4px;
   box-shadow: 0px 2px 3px #d0d0d0;
   padding: 2em 2em 0em 2em;
@@ -223,7 +230,7 @@ header a {
   width: 100%;
 }
 .icon {
-  background: url(./icon-1.png) no-repeat 50% 50%;
+  background: #fff url(https://descargas.viafirma.com/mobileapps/ci/lpadocs/android/3.4.5/pre/icon-1.png) no-repeat 50% 50%;
   border: 1px solid #ddd;
   border-radius: 8px;
   display: block;
@@ -256,11 +263,9 @@ header a {
   transition: .3s;
 }
 .help {
-
-  background-image: linear-gradient(#145b94, #093962);
-  color: white;
-  padding: 2em;
+  background: #fafafa;
   float: left;
+  padding: 2em;
   }
   .help h2 {
     font-weight: lighter;
@@ -299,7 +304,8 @@ header a {
   .quarter {
     width: 100%;
   }
-  .handImage {
+  .handImage,
+  .splash {
     display: none;
   }
   .download {
