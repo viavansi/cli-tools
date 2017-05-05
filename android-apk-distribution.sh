@@ -223,7 +223,7 @@ header a {
   width: 100%;
 }
 .icon {
-  background: url(https://descargas.viafirma.com/mobileapps/ci/lpadocs/android/3.4.5/pre/icon-1.png) no-repeat 50% 50%;
+  background: url(./icon-1.png) no-repeat 50% 50%;
   border: 1px solid #ddd;
   border-radius: 8px;
   display: block;
@@ -271,11 +271,11 @@ header a {
     font-weight: lighter;
   }
   footer {
-  background: #0c2e4a;
-  color: white;
-  display: inline-block;
-  font-size: 12px;
-  padding: 1em 3em;
+    background: #145b94;
+    color: white;
+    display: inline-block;
+    font-size: 12px;
+    padding: 1em 3em;
 }
 @media (max-width: 1170px) {
   .container {
@@ -322,7 +322,7 @@ header a {
     <header class="full">
       <div class="container">
         <div class="half logoViafirma">
-          <img alt="logoViafirma" src="img/logo-viafirma-white.png"/>
+          <img alt="logoViafirma" src="https://descargas.viafirma.com/afuentes/img/descargas/logo-viafirma-white.png"/>
         </div>
         <div class="half">
           <a href="https://www.viafirma.com" target="_blank">Web viafirma</a>
@@ -333,13 +333,9 @@ header a {
       <section class="full download">
         <div class="container">
           <div class="half center handImage">
-            <p class="left introText">
-            Bienvenidos a viafirma. Esta es tu página de descarga para esta peaso de aplicación de cadi.
-            </p>
-            <img src="http://descargas.viafirma.com/afuentes/img/iphoneHand.png"/>
+            <img src="https://descargas.viafirma.com/afuentes/img/descargas/iphoneHand.png"/>
           </div>
           <div class="half center appInfo">
-            <p class="info threeQuarters">Estás descargando una APP externa a la App Store. Es necesario confiar en el certificado de distribución para su ejecución.</p>
             <div class="threeQuarters infoContainer">
               <div class="appName">
                 <span class="icon"></span>
@@ -359,23 +355,23 @@ header a {
         </div>
       </section>
       <section class="full help center" id="help">
-        <h2 class="left">Confiar en viafirma como desarrollador</h3> 
+        <h2 class="left">Cómo confiar en viafirma como desarrollador</h3> 
         <ul>
           <li class="illustration quarter">
             <h3>1. Accede a Settings</h3>
-            <img src="img/step1.png"/>
+            <img src="https://descargas.viafirma.com/afuentes/img/descargas/step-2.png"/>
           </li>
           <li class="illustration quarter">
             <h3>2. Gestión de Dispositivos</h3>
-            <img src="img/step1.png"/>
+            <img src="https://descargas.viafirma.com/afuentes/img/descargas/step-3.png"/>
           </li>
           <li class="illustration quarter">
             <h3>3. Confiar en "VIAFIRMA S.L."</h3>
-            <img src="img/step1.png"/>
+            <img src="https://descargas.viafirma.com/afuentes/img/descargas/step-4.png"/>
           </li>
           <li class="illustration quarter">
             <h3>4. Aceptar mensaje de confirmación</h3>
-            <img src="img/step1.png"/>
+            <img src="https://descargas.viafirma.com/afuentes/img/descargas/step-5.png"/>
           </li>
         </ul>
         <a href="http://doc.viafirma.com/documents/ios/ios_viafirma_dev_trusted.html">Ayuda para confiar en el certificado de distribución</a>
