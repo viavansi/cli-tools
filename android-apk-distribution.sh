@@ -230,7 +230,7 @@ header a {
   width: 100%;
 }
 .icon {
-  background: #fff url(https://descargas.viafirma.com/mobileapps/ci/lpadocs/android/3.4.5/pre/icon-1.png) no-repeat 50% 50%;
+  background: #fff url(./icon-1.png) no-repeat 50% 50%;
   border: 1px solid #ddd;
   border-radius: 8px;
   display: block;
