@@ -258,7 +258,7 @@ header a {
   width: 100%;
 }
 .download .appName h2 {
-  margin-left: 34px;
+  padding-left: 34px;
   margin-top: .66em;
   width: 100%;
   text-align: left;
@@ -267,7 +267,7 @@ header a {
   display: block;
   font-weight: lighter;
   font-style: italic;
-  margin-left: 82px;
+  padding-left: 82px;
   text-align: left;
   opacity: .5;
   width: 100%;
@@ -305,6 +305,10 @@ header a {
   background: #16466e;
   transition: .3s;
 }
+.illustration img {
+    max-width: 320px;
+    width: 100%;
+}
 .help {
   background: #fafafa;
   float: left;
@@ -332,18 +336,18 @@ header a {
   .quarter {
     width: 50%;
   }
-
-  .download .info,
-  .download .infoContainer {
-    min-width: 380px; 
-  }
 }
 @media (max-width: 768px) {
   .logoViafirma {
     text-align: center;
     width: 100%;
   }
+  header .half:last-child {
+    display: none;
+  }
   .half,
+  .third,
+  .threeQuarters,
   .quarter {
     width: 100%;
   }
