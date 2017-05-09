@@ -214,7 +214,7 @@ header a {
   padding: 1em 0em;
 }
 .handImage img {
-  margin-top: 30px;
+  margin-top: 60px;
   margin-bottom: -5px;
 }
 .splash {
@@ -240,6 +240,9 @@ header a {
   margin: 0 auto;
   margin-bottom: 1em;
   padding: 1em;
+}
+.download .info a {
+  color: orange;
 }
 .download .appInfo .infoContainer {
   background: white;
@@ -383,7 +386,7 @@ header a {
             <p class="left introText">
             <!-- Bienvenidos a la página de descargas de Viafirma. -->
             </p>
-            <img src="https://descargas.viafirma.com/afuentes/img/descargas/splah-firmadocs-ios.png"/>
+            <img src="https://descargas.viafirma.com/afuentes/img/descargas/splah-ios.png"/>
           </div>
           <div class="half center appInfo">
             <p class="info threeQuarters">Vas a instalar una APP externa a la App Store. Es necesario <a href="#help">confiar en el certificado de distribución</a> para su ejecución.</p>

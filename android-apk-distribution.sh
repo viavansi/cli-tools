@@ -175,7 +175,7 @@ header a {
   padding: 1em 0em;
 }
 .handImage img {
-  margin-top: 30px;
+  margin-top: 60px;
   margin-bottom: -5px;
 }
 .splash {
@@ -201,6 +201,9 @@ header a {
   margin: 0 auto;
   margin-bottom: 1em;
   padding: 1em;
+}
+.download .info a {
+  color: orange;
 }
 .download .appInfo .infoContainer {
   background: white;
@@ -344,7 +347,7 @@ header a {
       <section class="full download">
         <div class="container">
           <div class="half center handImage">
-            <img src="https://descargas.viafirma.com/afuentes/img/descargas/iphoneHand.png"/>
+            <img src="https://descargas.viafirma.com/afuentes/img/descargas/splash-android.png"/>
           </div>
           <div class="half center appInfo">
             <p class="info threeQuarters">Vas a descargar una APP externa al Google Play. Es necesario <a href="#help">activar orígenes desconocidos</a> para su ejecución.</p>
