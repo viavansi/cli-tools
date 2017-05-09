@@ -386,7 +386,7 @@ header a {
             <p class="left introText">
             <!-- Bienvenidos a la página de descargas de Viafirma. -->
             </p>
-            <img src="https://descargas.viafirma.com/afuentes/img/descargas/splah-ios.png"/>
+            <img src="https://descargas.viafirma.com/afuentes/img/descargas/splash-ios.png"/>
           </div>
           <div class="half center appInfo">
             <p class="info threeQuarters">Vas a instalar una APP externa a la App Store. Es necesario <a href="#help">confiar en el certificado de distribución</a> para su ejecución.</p>
