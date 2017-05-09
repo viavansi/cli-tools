@@ -98,7 +98,7 @@ function build_ota_page()
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>$app_name - $short_version_string</title>
-  <style>
+ <style>
   * {
     box-sizing: border-box;
     margin: 0;
@@ -207,6 +207,7 @@ header a {
   box-shadow: 0px 1px 10px #d0d0d0;
   border-radius: 3px;
   margin: 0 auto;
+  margin-bottom: 1.5em;
   padding: 2em;
 }
 .download .appName {
@@ -215,7 +216,7 @@ header a {
   width: 100%;
 }
 .download .appName h2 {
-  margin-left: 34px;
+  padding-left: 34px;
   margin-top: .66em;
   width: 100%;
   text-align: left;
@@ -224,7 +225,7 @@ header a {
   display: block;
   font-weight: lighter;
   font-style: italic;
-  margin-left: 82px;
+  padding-left: 82px;
   text-align: left;
   opacity: .5;
   width: 100%;
@@ -275,6 +276,10 @@ header a {
   .help h3 {
     font-weight: lighter;
   }
+.illustration img {
+  max-width: 320px;
+  width: 100%;
+}
   footer {
     background: #145b94;
     color: white;
@@ -289,19 +294,19 @@ header a {
   .quarter {
     width: 50%;
   }
-
-  .download .info,
-  .download .infoContainer {
-    min-width: 380px; 
-  }
 }
 @media (max-width: 768px) {
   .logoViafirma {
     text-align: center;
     width: 100%;
   }
+  header .half:last-child {
+    display: none;
+  }
   .half,
-  .quarter {
+  .third,
+  .quarter,
+  .threeQuarters {
     width: 100%;
   }
   .handImage,
@@ -342,6 +347,7 @@ header a {
             <img src="https://descargas.viafirma.com/afuentes/img/descargas/iphoneHand.png"/>
           </div>
           <div class="half center appInfo">
+            <p class="info threeQuarters">Vas a descargar una APP externa al Google Play. Es necesario <a href="#help">activar orígenes desconocidos</a> para su ejecución.</p>
             <div class="threeQuarters infoContainer">
               <div class="appName">
                 <span class="icon"></span>
@@ -361,38 +367,27 @@ header a {
         </div>
       </section>
       <section class="full help center" id="help">
-        <h2 class="left">Cómo confiar en viafirma como desarrollador</h3> 
+        <h2 class="left">Cómo instalar aplicaciones desde orígenes desconocidos</h3> 
         <ul>
-          <li class="illustration quarter">
+          <li class="illustration third">
             <h3>1. Accede a Settings</h3>
-            <img src="https://descargas.viafirma.com/afuentes/img/descargas/step-2.png"/>
+            <img src="https://descargas.viafirma.com/afuentes/img/descargas/android-step-1.png"/>
           </li>
-          <li class="illustration quarter">
-            <h3>2. Gestión de Dispositivos</h3>
-            <img src="https://descargas.viafirma.com/afuentes/img/descargas/step-3.png"/>
+          <li class="illustration third">
+            <h3>2. Entramos en Seguridad</h3>
+            <img src="https://descargas.viafirma.com/afuentes/img/descargas/android-step-2.png"/>
           </li>
-          <li class="illustration quarter">
-            <h3>3. Confiar en "VIAFIRMA S.L."</h3>
-            <img src="https://descargas.viafirma.com/afuentes/img/descargas/step-4.png"/>
-          </li>
-          <li class="illustration quarter">
-            <h3>4. Aceptar mensaje de confirmación</h3>
-            <img src="https://descargas.viafirma.com/afuentes/img/descargas/step-5.png"/>
+          <li class="illustration third">
+            <h3>3. Activamos Orígenes desconocidos</h3>
+            <img src="https://descargas.viafirma.com/afuentes/img/descargas/android-step-3.png"/>
           </li>
         </ul>
         <a href="http://doc.viafirma.com/documents/ios/ios_viafirma_dev_trusted.html">Ayuda para confiar en el certificado de distribución</a>
       </section>
     </main>
     <footer class="full">
-      <div class="container">
-        <div class="half">
-          <p>&copy; $developer - `date +%Y`</p>
-        </div>
-        <ul class="half social">
-          <li class="facebook">Facebook</li>
-          <li class="twiiter">Twitter</li>
-          <li class="email">Email</li>
-        </ul>
+      <div class="container center">
+          <p>&copy; Viafirma - 2017</p>
       </div>
     </footer>
   </body>
