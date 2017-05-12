@@ -274,6 +274,7 @@ header a {
 }
 .icon {
   background: #fff url(./icon-1.png) no-repeat 50% 50%;
+  background-size: 100%;
   border: 1px solid #ddd;
   border-radius: 8px;
   display: block;
