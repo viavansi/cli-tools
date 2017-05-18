@@ -220,13 +220,10 @@ header a {
   margin-bottom: -5px;
 }
 .splash {
-  background: #fff url(./launchimage.png) no-repeat 100% 100%;
-  background-size: 100%;
   position: relative;
   margin-left: -282px;
   top: -164px;
   width: 146px;
-  height: 260px;
 }
 .download {
   background: #fff;
@@ -396,7 +393,7 @@ header a {
             <!-- Bienvenidos a la página de descargas de Viafirma. -->
             </p>
             <img src="https://descargas.viafirma.com/afuentes/img/descargas/splash-ios.png"/>
-            <img class="splash" <!--src="$artifacts_url/launchimage.png"--> />
+            <img class="splash" src="$artifacts_url/launchimage.png" />
           </div>
           <div class="half center appInfo">
             <p class="info threeQuarters">Vas a instalar una APP externa a la App Store. Es necesario <a href="#help">confiar en el certificado de distribución</a> para su ejecución.</p>
