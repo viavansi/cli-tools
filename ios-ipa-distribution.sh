@@ -56,6 +56,8 @@ function ipa_info()
  -revert-iphone-optimizations -q Payload/*.app/AppIcon40x40@2x.png $ci_dir/icon-1.png
   xcrun -sdk iphoneos pngcrush \
  -revert-iphone-optimizations -q Payload/*.app/AppIcon60x60@2x.png $ci_dir/icon-2.png
+ xcrun -sdk iphoneos pngcrush \
+ -revert-iphone-optimizations -q Payload/*.app/LaunchImage-700-568h@2x.png $ci_dir/launchimage.png
 
   echo "Firmado por: $certificateSubject"
   echo "Certificado de distribución válido hasta: $expirationDate"
@@ -218,11 +220,10 @@ header a {
   margin-bottom: -5px;
 }
 .splash {
-  position: absolute;
-  height: auto;
-  top: 297px;
-  margin-left: 5.5px;
-  width: 145px;
+  position: relative;
+  margin-left: -282px;
+  top: -164px;
+  width: 146px;
 }
 .download {
   background: #fff;
@@ -337,8 +338,9 @@ header a {
   .quarter {
     width: 50%;
   }
+
 }
-@media (max-width: 768px) {
+@media (max-width: 830px) {
   .logoViafirma {
     text-align: center;
     width: 100%;
@@ -353,7 +355,7 @@ header a {
     width: 100%;
   }
   .handImage,
-  .splash {
+   .splash{
     display: none;
   }
   .download {
@@ -377,7 +379,6 @@ header a {
       <div class="container">
         <div class="half logoViafirma">
           <img alt="logoViafirma" src="https://descargas.viafirma.com/afuentes/img/descargas/logo-viafirma-white.png"/>
-          <!-- <img class="splash" src="https://descargas.viafirma.com/afuentes/img/descargas/splash-iphone.png"/> -->
         </div>
         <div class="half">
           <a href="https://www.viafirma.com" target="_blank">Web viafirma</a>
@@ -392,6 +393,7 @@ header a {
             <!-- Bienvenidos a la página de descargas de Viafirma. -->
             </p>
             <img src="https://descargas.viafirma.com/afuentes/img/descargas/splash-ios.png"/>
+            <img class="splash" src="$artifacts_url/launchimage.png"/>
           </div>
           <div class="half center appInfo">
             <p class="info threeQuarters">Vas a instalar una APP externa a la App Store. Es necesario <a href="#help">confiar en el certificado de distribución</a> para su ejecución.</p>
