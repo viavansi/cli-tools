@@ -460,6 +460,7 @@ function distribute_app()
     cp -f $ci_dir/index.html $out/$app_url/ios/$short_version_string/$environment/index.html
     cp -f $ci_dir/icon-1.png $out/$app_url/ios/$short_version_string/$environment/icon-1.png
     cp -f $ci_dir/icon-2.png $out/$app_url/ios/$short_version_string/$environment/icon-2.png
+    cp -f $ci_dir/launchimage.png $out/$app_url/ios/$short_version_string/$environment/launchimage.png
     rm $ci_dir/app.plist
     rm $ci_dir/index.html
     #echo "Create OTA URL: $artifacts_url"
