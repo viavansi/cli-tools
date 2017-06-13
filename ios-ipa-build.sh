@@ -22,6 +22,12 @@ app_plist=${6}
 mobileprovision=${7}
 releases_dir=${8}
 export_options=${9}
+targetName=${10}
+
+if [ -z "$targetName" ]
+then
+    targetName="documents"
+fi
 
 #devired_data_path="/tmp/DerivedData"
 devired_data_path="$releases_dir/DerivedData"
@@ -111,7 +117,7 @@ function check_ipa()
 
   mv $releases_dir/$scheme.ipa $releases_dir/$scheme.zip
   unzip -qq $releases_dir/$scheme.zip -d $releases_dir/
-  xcrun codesign -dv $releases_dir/Payload/documents.app >| output
+  xcrun codesign -dv $releases_dir/Payload/$targetName.app >| output
 
   if [ $? -ne 0 ]
   then

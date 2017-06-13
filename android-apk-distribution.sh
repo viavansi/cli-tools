@@ -18,26 +18,26 @@ project_dir=`pwd`
 os="android"
 
 function show_usage() {
-    echo "usage: $program_name param1 param2 param3"
-    echo "param1:	.apk path"
-    echo "param2:	environment"
-    echo "param3: base url"
-    echo "param4: output directory"
-    echo "param5: developer company"
-    echo "use \" \" in params with white spaces"
-    exit 1
+  echo "usage: $program_name param1 param2 param3"
+  echo "param1:	.apk path"
+  echo "param2:	environment"
+  echo "param3: base url"
+  echo "param4: output directory"
+  echo "param5: developer company"
+  echo "use \" \" in params with white spaces"
+  exit 1
 }
 
 function check_params() {
-    if [ "$apk" == "" ]; then
-        echo "Failed: Apk empty"
-        show_usage
-        exit 1
-    elif [ "$environment" == "" ]; then
-        echo "Failed: Environment empty"
-        show_usage
-        exit 1
-    fi
+  if [ "$apk" == "" ]; then
+    echo "Failed: Apk empty"
+    show_usage
+    exit 1
+  elif [ "$environment" == "" ]; then
+    echo "Failed: Environment empty"
+    show_usage
+    exit 1
+  fi
 }
 
 function set_environment()
@@ -95,138 +95,325 @@ function build_ota_page()
   <!DOCTYPE html>
   <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>$app_name - $short_version_string</title>
-
-    <style>
-      body {
-        background: #eee;
-        font-family: "Lucida Grande",Verdana, Arial, Helvetica, sans-serif;
-        font-size: 16px;
-        margin: 0;
-        padding: 0;
-      }
-
-      p {
-        color: #777;
-        font-size: 11px;
-        font-style: italic;
-        margin: 0 1.5em;
-        text-align: center;
-      }
-
-      #wrapper {
-        background-color: #fff;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        margin: 1em 1em 0.5em 1em;
-        padding: 0.25em;
-      }
-
-        #wrapper h1 {
-          float: left;
-          font-size: 18px;
-          font-weight: normal;
-          text-align: center;
-          margin-right: 1em;
-          line-height: 45px;
-        }
-
-        #wrapper h1 span {
-          display: block;
-          font-size: 12px;
-          color: #999797;
-          font-style: italic;
-          line-height: 1;
-          text-align: left;
-        }
-
-        #wrapper .icon {
-          background: #fff url(./icon-1.png) no-repeat 50% 50%;
-          border: 1px solid #ccc;
-          border-radius: 3px;
-          display: block;
-          height: 57px;
-          margin: 15px 0.5em 15px 1em;
-          width: 57px;
-          padding: 2px;
-          float: left;
-        }
-
-        #wrapper a {
-          clear: both;
-          background-color: #006DCC;
-          background-image: linear-gradient(to bottom, #0088CC, #0044CC);
-          background-repeat: repeat-x;
-          border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-          color: #FFFFFF;
-          text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-          border: 0 none;
-          border-radius: 6px 6px 6px 6px;
-          box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset, 0 1px 5px rgba(0, 0, 0, 0.25);
-          color: #FFFFFF;
-          font-size: 18px;
-          font-weight: 200;
-          padding: 19px 24px;
-          transition: none 0s ease 0s;
-
-          display: block;
-          margin: 1em;
-          text-decoration: none;
-          text-align: center;
-        }
-
-        #wrapper a:focus, #wrapper a:hover, #wrapper a:active {
-          background-color: #0044CC;
-          box-shadow: none;
-          background-image: none;
-        }
-
-        @media (-webkit-min-device-pixel-ratio: 2),	 (min-resolution: 192dpi) {
-          #wrapper .icon {
-            background-image: url(./icon-2.png);
-            background-size: 57px 57px;
-          }
-        }
-    </style>
-  </head>
-  <body>
-    <div id="wrapper">
-      <span class="icon"></span>
-      <h1>$app_name <span>Versión $short_version_string - $git_revision</span></h1>
-      <a href=$artifacts_url/$apk_name>Instalar aplicación</a>
-      <ul style="font-size: 11px;color: gray;">
-      <li>Sistema operativo: $os</li>
-      <li>Código de aplicación: $package_name</li>
-      <li>Aplicación compilada el: `date +%d/%m/%Y`</li>
-      <li>Código de versión: $version_code</li>
-    </ul>
-    <p>
-    <img src="https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=$artifacts_url/index.html&choe=UTF-8"></p>
-    </div>
-    <p>&copy; $developer - `date +%Y`</p>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>$app_name - $short_version_string</title>
+ <style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    margin: 0 auto;
+    width: 1170px;
+  }
+  .full, 
+  .half, 
+  .third, 
+  .quarter {
+    float: left;
+  }
+  .full {
+    width: 100%;
+  }
+  .threeQuarters {
+    width: 75%;
+  }
+  .half {
+    width: 50%;
+  }
+  .third {
+    width: 33.33%;
+  }
+  .quarter {
+    width: 25%;
+  }
+  .center {
+    text-align: center;
+  }
+  .left {
+    text-align: left;
+  }
+  .right {
+    text-align: right;
+  }
+  body {
+  color: #444e56;
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+}
+li {
+  list-style: none; 
+  padding: .25em 0em;
+}
+header {
+  background: #145b94;
+  display: block;
+  width: 100%;
+  position: relative;
+  float: left;
+  height: 100px;
+}
+header .container {
+  display: flex;
+  align-items: center;
+}
+header a {
+  color: white;
+  float: right;
+  padding: 2em 4.75em;
+  text-decoration: none;
+}
+.logoViafirma {
+  padding: 1.25em 0em;
+}
+.logoViafirma img {
+  max-width: 200px;
+}
+.introText {
+  padding: 1em 0em;
+}
+.handImage img {
+  margin-top: 60px;
+  margin-bottom: -5px;
+}
+.splash {
+  position: absolute;
+  height: auto;
+  top: 297px;
+  margin-left: 5.5px;
+  width: 145px;
+}
+.download {
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0px 2px 3px #d0d0d0;
+  padding: 2em 2em 0em 2em;
+}
+.download .info {
+  background: #FBF2E1;
+  border: 1px solid orange;
+  border-radius: 3px;
+  color: orange;
+  font-size: 14px;
+  font-weight: lighter;
+  margin: 0 auto;
+  margin-bottom: 1em;
+  padding: 1em;
+}
+.download .info a {
+  color: orange;
+}
+.download .appInfo .infoContainer {
+  background: white;
+  box-shadow: 0px 1px 10px #d0d0d0;
+  border-radius: 3px;
+  margin: 0 auto;
+  margin-bottom: 1.5em;
+  padding: 2em;
+}
+.download .appName {
+  display: inline-block;
+  margin-bottom: -1em;
+  width: 100%;
+}
+.download .appName h2 {
+  padding-left: 34px;
+  margin-top: .66em;
+  width: 100%;
+  text-align: left;
+}
+.download .appName small {
+  display: block;
+  font-weight: lighter;
+  font-style: italic;
+  padding-left: 82px;
+  text-align: left;
+  opacity: .5;
+  width: 100%;
+}
+.icon {
+  background: #fff url(./icon-1.png) no-repeat 50% 50%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  display: block;
+  float: left; 
+  height: 57px;
+  margin: 15px 0.5em 15px 1em;
+  width: 57px;
+}
+.download ul {
+  font-size: 10px;
+  line-height: 14px;
+  margin-top: 2em;
+  opacity: .5;
+  text-align: left;
+}
+.button {
+  background: #145b94;
+  border-radius: 4px;
+  color: white;
+  display: block;
+  margin: 0 auto;
+  padding: .75em 2em;
+  text-align: center;
+  text-decoration: none;
+  text-transform: capitalize;
+  transition: .3s;
+}
+.button:hover {
+  background: #16466e;
+  transition: .3s;
+}
+.help {
+  background: #fafafa;
+  float: left;
+  padding: 2em;
+  }
+  .help h2 {
+    font-weight: lighter;
+    padding: 1.5em 0em;
+    text-align: center;
+  }
+  .help h3 {
+    font-weight: lighter;
+  }
+.illustration img {
+  max-width: 320px;
+  width: 100%;
+}
+  footer {
+    background: #145b94;
+    color: white;
+    display: inline-block;
+    font-size: 12px;
+    padding: 1em 3em;
+}
+@media (max-width: 1170px) {
+  .container {
+    width: 100%;
+  }
+  .quarter {
+    width: 50%;
+  }
+}
+@media (max-width: 768px) {
+  .logoViafirma {
+    text-align: center;
+    width: 100%;
+  }
+  header .half:last-child {
+    display: none;
+  }
+  .half,
+  .third,
+  .quarter,
+  .threeQuarters {
+    width: 100%;
+  }
+  .handImage,
+  .splash {
+    display: none;
+  }
+  .download {
+    margin: 0;
+    padding: 2em 1em;
+  }
+  .appInfo .appName + img {
+    display: none;
+  }
+  .download .button {
+    margin: 2em 0em;
+  }
+  .illustration {
+    padding: 2em 0em;
+  }
+}
+</style>
+</head>
+<body>
+    <header class="full">
+      <div class="container">
+        <div class="half logoViafirma">
+          <img alt="logoViafirma" src="https://descargas.viafirma.com/afuentes/img/descargas/logo-viafirma-white.png"/>
+        </div>
+        <div class="half">
+          <a href="https://www.viafirma.com" target="_blank">Web viafirma</a>
+        </div>
+      </div>
+    </header>
+    <main>
+      <section class="full download">
+        <div class="container">
+          <div class="half center handImage">
+            <img src="https://descargas.viafirma.com/afuentes/img/descargas/splash-android.png"/>
+          </div>
+          <div class="half center appInfo">
+            <p class="info threeQuarters">Vas a descargar una APP externa al Google Play. Es necesario <a href="#help">activar orígenes desconocidos</a> para su ejecución.</p>
+            <div class="threeQuarters infoContainer">
+              <div class="appName">
+                <span class="icon"></span>
+                <h2>$app_name</h2>
+                <small>Versión $short_version_string - $git_revision</small>
+              </div>
+              <img src="https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=$artifacts_url/index.html&choe=UTF-8">
+              <a class="button" href=$artifacts_url/$apk_name>Instalar aplicación</a>
+              <ul>
+                <li>Sistema operativo: $os</li>
+                <li>Código de aplicación: $package_name</li>
+                <li>Aplicación compilada el: `date +%d/%m/%Y`</li>
+                <li>Código de versión: $version_code</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="full help center" id="help">
+        <h2 class="left">Cómo instalar aplicaciones desde orígenes desconocidos</h3> 
+        <ul>
+          <li class="illustration third">
+            <h3>1. Accede a Settings</h3>
+            <img src="https://descargas.viafirma.com/afuentes/img/descargas/android-step-1.png"/>
+          </li>
+          <li class="illustration third">
+            <h3>2. Entramos en Seguridad</h3>
+            <img src="https://descargas.viafirma.com/afuentes/img/descargas/android-step-2.png"/>
+          </li>
+          <li class="illustration third">
+            <h3>3. Activamos Orígenes desconocidos</h3>
+            <img src="https://descargas.viafirma.com/afuentes/img/descargas/android-step-3.png"/>
+          </li>
+        </ul>
+        <a href="http://doc.viafirma.com/documents/ios/ios_viafirma_dev_trusted.html">Ayuda para confiar en el certificado de distribución</a>
+      </section>
+    </main>
+    <footer class="full">
+      <div class="container center">
+          <p>&copy; Viafirma - 2017</p>
+      </div>
+    </footer>
   </body>
-  </html>
+</html>
 EOF
 }
 
 
 function distribute_app()
 {
-    mkdir -p $out/$scheme/$os/$short_version_string/$environment
-    cp -f $apk $out/$scheme/$os/$short_version_string/$environment/$apk_name
-    cp -f $project_dir/index.html $out/$scheme/$os/$short_version_string/$environment/index.html
-    cp -f $project_dir/icon.png $out/$scheme/$os/$short_version_string/$environment/icon-1.png
-    cp -f $project_dir/icon.png $out/$scheme/$os/$short_version_string/$environment/icon-2.png
-    echo "Create OTA dir: $out/$scheme/$os/$short_version_string/$environment"
-    echo $artifacts_url/index.html
+  mkdir -p $out/$scheme/$os/$short_version_string/$environment
+  cp -f $apk $out/$scheme/$os/$short_version_string/$environment/$apk_name
+  cp -f $project_dir/index.html $out/$scheme/$os/$short_version_string/$environment/index.html
+  cp -f $project_dir/icon.png $out/$scheme/$os/$short_version_string/$environment/icon-1.png
+  cp -f $project_dir/icon.png $out/$scheme/$os/$short_version_string/$environment/icon-2.png
+  echo "Create OTA dir: $out/$scheme/$os/$short_version_string/$environment"
+  echo $artifacts_url/index.html
 }
 
 function clean_up() {
-    rm -rf ./apk_zip
-    rm -rf $project_dir/index.html
-    rm -rf $project_dir/icon.png
+  rm -rf ./apk_zip
+  rm -rf $project_dir/index.html
+  rm -rf $project_dir/icon.png
 }
 
 function f_gradle() {
@@ -247,9 +434,9 @@ function f_gradle() {
 }
 
 function f_image_apk() {
-    unzip -o -d ./apk_zip $apk
-    image_folder=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt d --values badging $apk | sed -n "/^application: /s/.*icon='\([^']*\).*/\1/p")
-    cp ./apk_zip/$image_folder $project_dir/icon.png
+  unzip -o -d ./apk_zip $apk
+  image_folder=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt d --values badging $apk | sed -n "/^application: /s/.*icon='\([^']*\).*/\1/p")
+  cp ./apk_zip/$image_folder $project_dir/icon.png
 }
 
 echo
