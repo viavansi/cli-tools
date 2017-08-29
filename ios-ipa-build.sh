@@ -87,7 +87,7 @@ function archive_app()
   if [ $? -ne 0 ]
   then
     cat output
-    failed $HOME/cli-tools/xcbuild-safe.sh_archive
+    failed $HOME/cli-tools/xcodebuild_archive
   fi
 
   rm -rf output
@@ -103,7 +103,7 @@ function export_ipa()
   if [ $? -ne 0 ]
   then
     cat output
-    failed $HOME/cli-tools/xcbuild-safe.sh_export
+    failed $HOME/cli-tools/xcodebuild_export
   fi
 
   rm -rf output
@@ -122,7 +122,7 @@ function check_ipa()
   if [ $? -ne 0 ]
   then
     cat output
-    failed $HOME/cli-tools/xcbuild-safe.sh_export
+    failed $HOME/cli-tools/xcodebuild_export
   fi
 
   rm -rf output
