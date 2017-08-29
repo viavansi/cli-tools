@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 
 # Remove CODE_SIGN_RESOURCE_RULES_PATH=$(SDKROOT)/ResourceRules.plist
 # Find the   /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/PackageApplication script and update it.
@@ -57,14 +57,14 @@ function describe_sdks()
 {
   #list the installed sdks
   echo "Available SDKs"
-  xcodebuild -showsdks
+  $HOME/cli-tools/xcbuild-safe.sh -showsdks
 }
 
 function describe_workspace()
 {
   #describe the project workspace
   echo "Available schemes"
-  xcodebuild -list -workspace $workspace
+  $HOME/cli-tools/xcbuild-safe.sh -list -workspace $workspace
 }
 
 function set_environment()
@@ -82,12 +82,12 @@ function archive_app()
 
 #PROVISIONING_PROFILE="$mobileprovision"
 
-  xcodebuild -workspace $workspace -scheme $scheme -sdk "iphoneos" -configuration Distribution CODE_SIGN_IDENTITY="$certificate" PROVISIONING_PROFILE="$mobileprovision" OTHER_CODE_SIGN_FLAGS="--keychain $keychain" -archivePath app.xcarchive archive >| output
+  $HOME/cli-tools/xcbuild-safe.sh -workspace $workspace -scheme $scheme -sdk "iphoneos" -configuration Distribution CODE_SIGN_IDENTITY="$certificate" PROVISIONING_PROFILE="$mobileprovision" OTHER_CODE_SIGN_FLAGS="--keychain $keychain" -archivePath app.xcarchive archive >| output
 
   if [ $? -ne 0 ]
   then
     cat output
-    failed xcodebuild_archive
+    failed $HOME/cli-tools/xcbuild-safe.sh_archive
   fi
 
   rm -rf output
@@ -97,13 +97,13 @@ function export_ipa()
 {
   echo "Export as \"$certificate\", embedding provisioning profile $mobileprovision ..."
 
-  xcodebuild -exportArchive -archivePath app.xcarchive -exportPath $releases_dir  -exportOptionsPlist $export_options
+  $HOME/cli-tools/xcbuild-safe.sh -exportArchive -archivePath app.xcarchive -exportPath $releases_dir  -exportOptionsPlist $export_options
   PROVISIONING_PROFILE_SPECIFIER="$mobileprovision" >| output
 
   if [ $? -ne 0 ]
   then
     cat output
-    failed xcodebuild_export
+    failed $HOME/cli-tools/xcbuild-safe.sh_export
   fi
 
   rm -rf output
@@ -122,7 +122,7 @@ function check_ipa()
   if [ $? -ne 0 ]
   then
     cat output
-    failed xcodebuild_export
+    failed $HOME/cli-tools/xcbuild-safe.sh_export
   fi
 
   rm -rf output
