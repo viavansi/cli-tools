@@ -54,7 +54,7 @@ function set_environment()
   app_name=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt d --values badging $apk | sed -n "/^application: /s/.*label='\([^']*\).*/\1/p")
 
   if [ "$scheme" == "" ]; then
-    scheme=$(echo $app_name | tr -d " \t\n\r" | tr '[:upper:]' '[:lower:]')
+    scheme=$(echo $app_name | tr -d " \t\n\r" | tr '[:upper:]' '[:lower:]' | tr "áéíóúÁÉÍÓÚ" "aeiouAEIOU")
   fi
 
   if [ "$developer" == "" ]; then
