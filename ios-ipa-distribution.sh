@@ -224,7 +224,7 @@ header a {
   position: relative;
   margin-left: -282px;
   top: -164px;
-  width: 146px;
+  width: 148px;
 }
 .download {
   background: #fff;
