@@ -49,6 +49,7 @@ function ipa_info()
   short_version_string=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$info_plist_domain")
   app_name=$(/usr/libexec/PlistBuddy -c "Print :CFBundleDisplayName" "$info_plist_domain")
   app_url=`echo $app_name | tr "[:upper:]" "[:lower:]" | tr -d ' '`
+  app_url=`echo $app_url | tr "áéíóúÁÉÍÓÚ" "aeiouAEIOU" | tr -d ' '`
   artifacts_url="$url/$app_url/ios/$short_version_string/$environment"
   git_revision=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$info_plist_domain")
 
@@ -223,7 +224,7 @@ header a {
   position: relative;
   margin-left: -282px;
   top: -164px;
-  width: 146px;
+  width: 148px;
 }
 .download {
   background: #fff;
