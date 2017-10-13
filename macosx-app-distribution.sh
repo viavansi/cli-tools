@@ -134,6 +134,7 @@ header a {
   border-radius: 4px;
   box-shadow: 0px 2px 3px #d0d0d0;
   padding: 2em 2em 0em 2em;
+  min-height: 650px;
 }
 .download .info {
   background: #FBF2E1;
