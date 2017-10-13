@@ -305,7 +305,7 @@ header a {
                 <h2>$name</h2>
                 <small>Versión $version</small>
               </div>
-              <a class="button"  href="$url/$app_url/macosx/$version/$environment/$app_url.dmg">Instalar aplicación</a>
+              <a class="button"  href="$url/$app_url/macos/$version/$environment/$app_url.dmg">Instalar aplicación</a>
               <ul>
                 <li>Aplicación compilada el: `date +%d/%m/%Y`</li>
               </ul>
