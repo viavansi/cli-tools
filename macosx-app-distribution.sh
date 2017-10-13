@@ -325,14 +325,14 @@ EOF
 
 function distribute_app()
 {
-    mkdir -p $out/$app_url/macosx/$version/$environment/
-    cp -f $dmg $out/$app_url/macosx/$version/$environment/$app_url.dmg
-    cp -f $current_dir/index.html $out/$app_url/macosx/$version/$environment/index.html
-    cp -f $current_dir/icon-1.png $out/$app_url/macosx/$version/$environment/icon-1.png
-    cp -f $current_dir/icon-2.png $out/$app_url/macosx/$version/$environment/icon-2.png
+    mkdir -p $out/$app_url/macos/$version/$environment/
+    cp -f $dmg $out/$app_url/macos/$version/$environment/$app_url.dmg
+    cp -f $current_dir/index.html $out/$app_url/macos/$version/$environment/index.html
+    cp -f $current_dir/icon-1.png $out/$app_url/macos/$version/$environment/icon-1.png
+    cp -f $current_dir/icon-2.png $out/$app_url/macos/$version/$environment/icon-2.png
     #cp -f $current_dir/launchimage.png $out/$app_url/ios/$short_version_string/$environment/launchimage.png
     rm $current_dir/index.html
-    echo "Create URL: $url/$app_url/macosx/$version/$environment/"
+    echo "Create URL: $url/$app_url/macos/$version/$environment/"
 }
 
 
