@@ -144,8 +144,10 @@ fi
 # Create the image
 echo "Creating disk image..."
 test -f "${DMG_TEMP_NAME}" && rm -f "${DMG_TEMP_NAME}"
-ACTUAL_SIZE=`du -s "$SRC_FOLDER" | awk '{print $1}'`
+ACTUAL_SIZE=`du -sm "$SRC_FOLDER" | awk '{print $1}'`
 DISK_IMAGE_SIZE=`(expr $ACTUAL_SIZE + 20)`
+echo "Source folder: $SRC_FOLDER"
+echo "Disk image size: $ACTUAL_SIZE"
 hdiutil create -srcfolder "$SRC_FOLDER" -volname "${VOLUME_NAME}" -fs HFS+ -fsargs "-c c=64,a=16,e=16" -format UDRW -size ${DISK_IMAGE_SIZE}m "${DMG_TEMP_NAME}"
 
 # mount it
