@@ -82,7 +82,7 @@ function archive_app()
 
 #PROVISIONING_PROFILE="$mobileprovision"
 
-  $HOME/cli-tools/xcbuild-safe.sh -workspace $workspace -scheme $scheme -sdk "iphoneos" -configuration Distribution CODE_SIGN_IDENTITY="$certificate" PROVISIONING_PROFILE="$mobileprovision" OTHER_CODE_SIGN_FLAGS="--keychain $keychain" -archivePath app.xcarchive archive >| output
+  $HOME/cli-tools/xcbuild-safe.sh -workspace $workspace -scheme $scheme -sdk "iphoneos" -configuration Distribution CODE_SIGN_IDENTITY="$certificate" APP_PROFILE="$mobileprovision" OTHER_CODE_SIGN_FLAGS="--keychain $keychain" -archivePath app.xcarchive archive >| output
 
   if [ $? -ne 0 ]
   then
