@@ -14,7 +14,7 @@ for TAG in `git tag --sort=v:refname|sed 's/\*//g'`;
 do 
   echo "" | cat - $FILE > /tmp/out && mv /tmp/out $FILE
 
-  git log --no-merges --date=short --pretty=format:"  * %h - %ad - (%aN) %s" $PREVIOUS_TAG...$TAG | cat - $FILE > /tmp/out &&
+  git log --no-merges --date=format:'%d/%m/%Y (%H:%M)' --pretty=format:"  * %h - %ad - (%aN) %s" $PREVIOUS_TAG...$TAG | cat - $FILE > /tmp/out &&
   mv /tmp/out $FILE
 
   DATE=`git log -1 --format=%ad --date=short $TAG`

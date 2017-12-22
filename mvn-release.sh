@@ -35,7 +35,7 @@ COUNT=`git rev-list $LAST_TAG...HEAD --count`
 if [[ $COUNT > 0 ]]; then
 
   echo "" |cat - $FILE > /tmp/out && mv /tmp/out $FILE
-  git log --pretty=format:"  * %h %s" $LAST_TAG...HEAD | cat - $FILE > /tmp/out &&
+  git log --no-merges --date=format:'%d/%m/%Y (%H:%M)' --pretty=format:"  * %h - %ad - (%aN) %s" $LAST_TAG...HEAD | cat - $FILE > /tmp/out &&
   mv /tmp/out $FILE
   echo "===================" | cat - $FILE > /tmp/out && mv /tmp/out $FILE
   echo "$VERSION / $DATE" | cat - $FILE > /tmp/out && mv /tmp/out $FILE
