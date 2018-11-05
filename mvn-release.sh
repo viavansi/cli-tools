@@ -50,6 +50,7 @@ if [[ $COUNT > 0 ]]; then
   mvn versions:set -DgenerateBackupPoms=false -DnewVersion="$NEXT_VERSION"
 
   git add pom.xml
+  git add **/pom.xml
   git commit -m "upgrade version to $NEXT_VERSION"
   git push origin $CURRENT_BRANCH
 
