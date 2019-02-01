@@ -435,7 +435,15 @@ function f_gradle() {
 
 function f_image_apk() {
   unzip -o -d ./apk_zip $apk
-  image_folder=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt d --values badging $apk | sed -n "/^application: /s/.*icon='\([^']*\).*/\1/p")
+  image_folder=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt d --values badging $apk | sed -n "/^application: /s/.*icon='\([^']*xml\).*/\1/p")
+  if [ $image_folder != "" ]; then
+    # Case XML defined as launch icon.
+    name_icon=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt d --values badging $apk | sed -n "/^application: /s/.*icon='.*\/\([^']*\).xml'*/\1/p")
+    image_folder="res/mipmap-hdpi-v4/$name_icon.png"
+  else 
+    # Case png defined as main icon.
+    image_folder=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt d --values badging $apk | sed -n "/^application: /s/.*icon='\([^']*\).*/\1/p")
+  fi
   cp ./apk_zip/$image_folder $project_dir/icon.png
 }
 
