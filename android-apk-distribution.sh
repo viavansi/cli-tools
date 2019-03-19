@@ -357,7 +357,7 @@ header a {
                 <h2>$app_name</h2>
                 <small>Versión $short_version_string - $git_revision</small>
               </div>
-              <img src="https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=$artifacts_url/index.html&choe=UTF-8">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=$artifacts_url/index.html">
               <a class="button" href=$artifacts_url/$apk_name>Instalar aplicación</a>
               <ul>
                 <li>Sistema operativo: $os</li>
