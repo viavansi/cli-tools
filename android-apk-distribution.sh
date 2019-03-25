@@ -357,7 +357,7 @@ header a {
                 <h2>$app_name</h2>
                 <small>Versión $short_version_string - $git_revision</small>
               </div>
-              <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=$artifacts_url/index.html">
+              <img src="https://quickchart.io/qr?text=$artifacts_url/index.html">
               <a class="button" href=$artifacts_url/$apk_name>Instalar aplicación</a>
               <ul>
                 <li>Sistema operativo: $os</li>
