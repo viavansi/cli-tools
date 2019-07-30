@@ -67,13 +67,24 @@ function describe_workspace()
   $HOME/cli-tools/xcbuild-safe.sh -list -workspace $workspace
 }
 
+function change_pbid()
+{
+  pbxproj_path=$1
+  new_bundle_id=$2
+  old_bundle_id=$(awk -F '=' '/PRODUCT_BUNDLE_IDENTIFIER/ {print $2; exit}' $pbxproj_path)
+  echo "Change bundle id from $old_bundle_id to $new_bundle_id"
+  sed -i "" "s/$old_bundle_id/$new_bundle_id;/g" $pbxproj_path
+}
+
 function set_environment()
 {
   #extract settings from the Info.plist file
   info_plist_domain=$(ls $app_plist | sed -e 's/\.plist//')
   short_version_string=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$app_plist")
-  bundle_identifier=$(/usr/libexec/PlistBuddy -c "Print CFBundleDisplayName" "$app_plist")
-  echo "$bundle_identifier ($scheme) version $short_version_string"
+  display_name=$(/usr/libexec/PlistBuddy -c "Print CFBundleDisplayName" "$app_plist")
+  bundle_identifier=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" "$app_plist")
+  echo "$display_name ($scheme) version $short_version_string ; with BundleId ($bundle_identifier)"
+  # change_pbid 'ViafirmaDocuments.xcodeproj/project.pbxproj' $bundle_identifier
 }
 
 function archive_app()
@@ -81,8 +92,12 @@ function archive_app()
   echo "Archive as \"$certificate\", embedding provisioning profile $mobileprovision ..."
 
 #PROVISIONING_PROFILE="$mobileprovision"
+  
+  # Retrieve provision name
+  security cms -D -i $mobileprovision > prov.plist
+  provision_name=$(/usr/libexec/PlistBuddy -c 'print ":Name"' prov.plist)
 
-  $HOME/cli-tools/xcbuild-safe.sh -workspace $workspace -scheme $scheme -sdk "iphoneos" -configuration Distribution CODE_SIGN_IDENTITY="$certificate" APP_PROFILE="$mobileprovision" OTHER_CODE_SIGN_FLAGS="--keychain $keychain" -archivePath app.xcarchive archive >| output
+  $HOME/cli-tools/xcbuild-safe.sh -workspace $workspace -scheme $scheme -sdk "iphoneos" -configuration Distribution CODE_SIGN_IDENTITY="$certificate" PRODUCT_BUNDLE_IDENTIFIER="$bundle_identifier" PROVISIONING_PROFILE_SPECIFIER="$provision_name" OTHER_CODE_SIGN_FLAGS="--keychain $keychain" -archivePath app.xcarchive archive >| output
 
   if [ $? -ne 0 ]
   then
