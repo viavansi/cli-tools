@@ -22,6 +22,7 @@ function show_usage() {
     echo "param5: base url"
     echo "param6: output directory"
     echo "param7: developer company"
+    echo "param8: version_name"
     echo "use \" \" in params with white spaces"
     exit 1
 }
@@ -339,7 +340,7 @@ function distribute_app()
 
 
 
-if [ "$#" -ne 7 ]; then
+if [ "$#" -ne 8 ]; then
     show_usage
 else
   echo
