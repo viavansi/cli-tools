@@ -9,6 +9,7 @@ environment=$4
 url=$5
 out=$6
 developer=$7
+version_name=$8
 current_dir=`pwd`
 app_url=`echo $name | tr "[:upper:]" "[:lower:]" | tr -d ' '`
 
@@ -41,7 +42,7 @@ function build_ota_page()
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>$name - $version</title>
+    <title>$name - $version_name</title>
 <style>
   * {
     box-sizing: border-box;
@@ -303,7 +304,7 @@ header a {
               <div class="appName">
                 <span class="icon"></span>
                 <h2>$name</h2>
-                <small>Versión $version</small>
+                <small>Versión $version_name</small>
               </div>
               <a class="button"  href="$url/$app_url/macos/$version/$environment/$app_url.dmg">Instalar aplicación</a>
               <ul>
