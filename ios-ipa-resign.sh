@@ -8,6 +8,7 @@ mobileprovision=$3
 entitlements=$4
 bundle_id=$5
 version=$6
+compilation=$7
 
 project_dir=`pwd`
 
@@ -43,6 +44,11 @@ function resign_app()
   if [ $version ]; then
     echo "change the version to $version"
     /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $version" "Payload/$target/Info.plist"
+  fi
+
+  if [ $compilation ]; then
+    echo "change the compilation version to $compilation"
+    /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $compilation" "Payload/$target/Info.plist"
   fi
 
   #echo "re-sign"
