@@ -10,6 +10,7 @@ url=$5
 out=$6
 developer=$7
 version_name=$8
+pkg=$9
 current_dir=`pwd`
 app_url=`echo $name | tr "[:upper:]" "[:lower:]" | tr -d ' '`
 
@@ -23,6 +24,7 @@ function show_usage() {
     echo "param6: output directory"
     echo "param7: developer company"
     echo "param8: version_name"
+    echo "param9: .pkg path"
     echo "use \" \" in params with white spaces"
     exit 1
 }
@@ -330,6 +332,9 @@ function distribute_app()
 {
     mkdir -p $out/$app_url/macos/$version/$environment/
     cp -f $dmg $out/$app_url/macos/$version/$environment/$app_url.dmg
+    if [ $pkg ]; then
+      cp -f $pkg $out/$app_url/macos/$version/$environment/$app_url.pkg
+    fi
     cp -f $current_dir/index.html $out/$app_url/macos/$version/$environment/index.html
     cp -f $current_dir/icon-1.png $out/$app_url/macos/$version/$environment/icon-1.png
     cp -f $current_dir/icon-2.png $out/$app_url/macos/$version/$environment/icon-2.png
