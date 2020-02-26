@@ -345,7 +345,7 @@ function distribute_app()
 
 
 
-if [ "$#" -ne 8 ]; then
+if [ "$#" -ne 9 ]; then
     show_usage
 else
   echo
