@@ -54,6 +54,8 @@ function resign_app()
   #echo "re-sign"
   if [ $entitlements != '' ]; then
     echo "resign with $entitlements"
+    rm Payload/$target/entitlements.plist
+    cp $entitlements Payload/$target/entitlements.plist
     /usr/bin/codesign -f -s "$certificate" --entitlements="$entitlements" "Payload/$target"
   else
     echo "resign without entitlements.plist"
