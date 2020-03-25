@@ -3,7 +3,7 @@
 # Config
 program_name=$0
 app=$1
-cetificate=$2
+certificate=$2
 mobileprovision=$3
 entitlements=$4
 bundle_id=$5
@@ -54,10 +54,10 @@ function resign_app()
   #echo "re-sign"
   if [ $entitlements != '' ]; then
     echo "resign with $entitlements"
-    /usr/bin/codesign -f -s "iPhone Distribution: $cetificate" --entitlements="$entitlements" "Payload/$target"
+    /usr/bin/codesign -f -s "$certificate" --entitlements="$entitlements" "Payload/$target"
   else
     echo "resign without entitlements.plist"
-    /usr/bin/codesign -f -s "iPhone Distribution: $cetificate" "Payload/$target"
+    /usr/bin/codesign -f -s "$certificate" "Payload/$target"
   fi
 
   #echo "re-package"
