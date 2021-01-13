@@ -7,6 +7,7 @@ environment=$2
 url=$3
 out=$4
 developer=$5
+copy_path=$6
 ci_dir=`pwd`
 
 function show_usage() {
@@ -16,6 +17,7 @@ function show_usage() {
     echo "param3: base url"
     echo "param4: output directory"
     echo "param5: developer company"
+    echo "param6: (optional) copy in /copy_path url"
     echo "use \" \" in params with white spaces"
     exit 1
 }
@@ -50,8 +52,10 @@ function ipa_info()
   app_name=$(/usr/libexec/PlistBuddy -c "Print :CFBundleDisplayName" "$info_plist_domain")
   app_url=`echo $app_name | tr "[:upper:]" "[:lower:]" | tr -d ' '`
   app_url=`echo $app_url | tr "áéíóúÁÉÍÓÚ" "aeiouAEIOU" | tr -d ' '`
-  artifacts_url="$url/$app_url/ios/$short_version_string/$environment"
   git_revision=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$info_plist_domain")
+
+  version_path=$short_version_string
+  artifacts_url="$url/$app_url/ios/$version_path/$environment"
 
   xcrun -sdk iphoneos pngcrush \
  -revert-iphone-optimizations -q Payload/*.app/AppIcon40x40@2x.png $ci_dir/icon-1.png
@@ -68,7 +72,6 @@ function ipa_info()
   echo "Environment for $bundle_identifier at version $short_version_string"
   #echo "App URL: $app_url"
   echo "Git Revision: $git_revision"
-  echo "$app_name: $artifacts_url"
 
   rm -rf Payload
   rm info-app.ipa
@@ -452,13 +455,13 @@ EOF
 
 function distribute_app()
 {
-    mkdir -p $out/$app_url/ios/$short_version_string/$environment/
-    cp -f $ipa $out/$app_url/ios/$short_version_string/$environment/app.ipa
-    cp -f $ci_dir/app.plist  $out/$app_url/ios/$short_version_string/$environment/app.plist
-    cp -f $ci_dir/index.html $out/$app_url/ios/$short_version_string/$environment/index.html
-    cp -f $ci_dir/icon-1.png $out/$app_url/ios/$short_version_string/$environment/icon-1.png
-    cp -f $ci_dir/icon-2.png $out/$app_url/ios/$short_version_string/$environment/icon-2.png
-    cp -f $ci_dir/launchimage.png $out/$app_url/ios/$short_version_string/$environment/launchimage.png
+    mkdir -p $out/$app_url/ios/$version_path/$environment/
+    cp -f $ipa $out/$app_url/ios/$version_path/$environment/app.ipa
+    cp -f $ci_dir/app.plist  $out/$app_url/ios/$version_path/$environment/app.plist
+    cp -f $ci_dir/index.html $out/$app_url/ios/$version_path/$environment/index.html
+    cp -f $ci_dir/icon-1.png $out/$app_url/ios/$version_path/$environment/icon-1.png
+    cp -f $ci_dir/icon-2.png $out/$app_url/ios/$version_path/$environment/icon-2.png
+    cp -f $ci_dir/launchimage.png $out/$app_url/ios/$version_path/$environment/launchimage.png
     rm $ci_dir/app.plist
     rm $ci_dir/index.html
     #echo "Create OTA URL: $artifacts_url"
@@ -482,7 +485,7 @@ function jenkins_summary()
 EOF
 }
 
-if [ "$#" -ne 5 ]; then
+if [ "$#" -lt 5 ]; then
     show_usage
 else
   echo
@@ -492,6 +495,15 @@ else
   build_ota_plist
   build_ota_page
   distribute_app
+  echo "$app_name: $artifacts_url"
+  if [ $copy_path ]; then
+    version_path="$copy_path"
+    artifacts_url="$url/$app_url/ios/$version_path/$environment"
+    build_ota_plist
+    build_ota_page
+    distribute_app
+    echo "$app_name: $artifacts_url"
+  fi
   jenkins_summary
   echo
   echo "................................."
