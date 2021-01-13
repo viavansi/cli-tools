@@ -132,10 +132,13 @@ function check_ipa()
   echo "Checking $releases_dir/$module_name.ipa ..."
 
   # Version copy of the .ipa
-  cp $releases_dir/$module_name.ipa $releases_dir/$scheme-$short_version_string.ipa
+  ipa_file="$scheme.ipa"
+  # ipa_file="$module_name.ipa"
+
+  cp $releases_dir/$ipa_file $releases_dir/$scheme-$short_version_string.ipa
 
   # Verify .app inside .ipa
-  unzip -qq $releases_dir/$module_name.ipa -d $releases_dir/content
+  unzip -qq $releases_dir/$ipa_file -d $releases_dir/content
   xcrun codesign -dv $releases_dir/content/Payload/$module_name.app >| output
 
   if [ $? -ne 0 ]
@@ -146,7 +149,7 @@ function check_ipa()
 
   rm -rf output
   rm -rf app.xcarchive
-  rm -rf $releases_dir/$module_name.ipa
+  rm -rf $releases_dir/$ipa_file
   rm -rf $releases_dir/content
 }
 
