@@ -22,11 +22,14 @@ app_plist=${6}
 mobileprovision=${7}
 releases_dir=${8}
 export_options=${9}
-targetName=${10}
+module_name=${10} # The name of the target in XCode.
 
-if [ -z "$targetName" ]
+cli_tools="$HOME/cli-tools"
+# cli_tools="/Users/elage/Developer/Utilities/cli-tools"
+
+if [ -z "$module_name" ]
 then
-    targetName="documents"
+    module_name="documents"
 fi
 
 #devired_data_path="/tmp/DerivedData"
@@ -57,14 +60,14 @@ function describe_sdks()
 {
   #list the installed sdks
   echo "Available SDKs"
-  $HOME/cli-tools/xcbuild-safe.sh -showsdks
+  $cli_tools/xcbuild-safe.sh -showsdks
 }
 
 function describe_workspace()
 {
   #describe the project workspace
   echo "Available schemes"
-  $HOME/cli-tools/xcbuild-safe.sh -list -workspace $workspace
+  $cli_tools/xcbuild-safe.sh -list -workspace $workspace
 }
 
 function change_pbid()
@@ -97,12 +100,12 @@ function archive_app()
   security cms -D -i $mobileprovision > prov.plist
   provision_name=$(/usr/libexec/PlistBuddy -c 'print ":Name"' prov.plist)
 
-  $HOME/cli-tools/xcbuild-safe.sh -workspace $workspace -scheme $scheme -sdk "iphoneos" -configuration Distribution CODE_SIGN_IDENTITY="$certificate" PRODUCT_BUNDLE_IDENTIFIER="$bundle_identifier" PROVISIONING_PROFILE_SPECIFIER="$provision_name" OTHER_CODE_SIGN_FLAGS="--keychain $keychain" -archivePath app.xcarchive archive >| output
+  $cli_tools/xcbuild-safe.sh -workspace $workspace -scheme $scheme -sdk "iphoneos" -configuration Distribution CODE_SIGN_IDENTITY="$certificate" PRODUCT_BUNDLE_IDENTIFIER="$bundle_identifier" PROVISIONING_PROFILE_SPECIFIER="$provision_name" OTHER_CODE_SIGN_FLAGS="--keychain $keychain" -archivePath app.xcarchive archive >| output
 
   if [ $? -ne 0 ]
   then
     cat output
-    failed $HOME/cli-tools/xcodebuild_archive
+    failed $current_dir/xcodebuild_archive
   fi
 
   rm -rf output
@@ -112,13 +115,13 @@ function export_ipa()
 {
   echo "Export as \"$certificate\", embedding provisioning profile $mobileprovision ..."
 
-  $HOME/cli-tools/xcbuild-safe.sh -exportArchive -archivePath app.xcarchive -exportPath $releases_dir  -exportOptionsPlist $export_options
+  $cli_tools/xcbuild-safe.sh -exportArchive -archivePath app.xcarchive -exportPath "$releases_dir"  -exportOptionsPlist $export_options
   PROVISIONING_PROFILE_SPECIFIER="$mobileprovision" >| output
 
   if [ $? -ne 0 ]
   then
     cat output
-    failed $HOME/cli-tools/xcodebuild_export
+    failed $cli_tools/xcodebuild_export
   fi
 
   rm -rf output
@@ -126,24 +129,25 @@ function export_ipa()
 
 function check_ipa()
 {
-  echo "Checking $releases_dir/$scheme-$short_version_string.ipa ..."
+  echo "Checking $releases_dir/$module_name.ipa ..."
 
-  cp $releases_dir/$scheme.ipa $releases_dir/$scheme-$short_version_string.ipa
+  # Version copy of the .ipa
+  cp $releases_dir/$module_name.ipa $releases_dir/$scheme-$short_version_string.ipa
 
-  mv $releases_dir/$scheme.ipa $releases_dir/$scheme.zip
-  unzip -qq $releases_dir/$scheme.zip -d $releases_dir/
-  xcrun codesign -dv $releases_dir/Payload/$targetName.app >| output
+  # Verify .app inside .ipa
+  unzip -qq $releases_dir/$module_name.ipa -d $releases_dir/content
+  xcrun codesign -dv $releases_dir/content/Payload/$module_name.app >| output
 
   if [ $? -ne 0 ]
   then
     cat output
-    failed $HOME/cli-tools/xcodebuild_export
+    failed $cli_tools/xcodebuild_export
   fi
 
   rm -rf output
   rm -rf app.xcarchive
-  rm -rf $releases_dir/$scheme.zip
-  rm -rf $releases_dir/Payload
+  rm -rf $releases_dir/$module_name.ipa
+  rm -rf $releases_dir/content
 }
 
 echo "........ Validate Keychain ........"
