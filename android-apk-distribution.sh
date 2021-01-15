@@ -12,10 +12,12 @@ url=$3
 out=$4
 developer=$5
 scheme=$6
+version_path=$7
 
 # Configuration
 project_dir=`pwd`
 os="android"
+aapt_dir="/Applications/android-sdk-macosx/build-tools/22.0.0/aapt"
 
 function show_usage() {
   echo "usage: $program_name param1 param2 param3"
@@ -24,6 +26,8 @@ function show_usage() {
   echo "param3: base url"
   echo "param4: output directory"
   echo "param5: developer company"
+  echo "param6: scheme"
+  echo "param7: path to copy version"
   echo "use \" \" in params with white spaces"
   exit 1
 }
@@ -44,14 +48,21 @@ function set_environment()
 {
   #extract versionName from the AndroidManifest.xml file
   echo "Extracting information from $apk"
-  android_manifest=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt dump badging $apk)
+  android_manifest=$($aapt_dir dump badging $apk)
 
-  short_version_string=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt dump badging $apk | grep -Eo "versionName=\'.*?\'" | cut -d"=" -f2 | cut -d"-" -f1 | grep -Eo "[0-9\.]+")
-  version_code=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt dump badging $apk | grep -Eo "versionCode=\'.*?\'" | cut -d"=" -f2 | grep -Eo "[0-9]+")
-  package_name=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt dump badging $apk | grep -Eo "package: name=\'.+?\'" | cut -d"=" -f2 | grep -Eo "[0-9A-Za-z\.]+")
+  short_version_string=$($aapt_dir dump badging $apk | grep -Eo "versionName=\'.*?\'" | cut -d"=" -f2 | cut -d"-" -f1 | grep -Eo "[0-9\.]+")
+
+  if [ "$version_path" == "" ]; then
+    ver_path=$short_version_string
+  else  
+    ver_path=$version_path
+  fi
+  
+  version_code=$($aapt_dir dump badging $apk | grep -Eo "versionCode=\'.*?\'" | cut -d"=" -f2 | grep -Eo "[0-9]+")
+  package_name=$($aapt_dir dump badging $apk | grep -Eo "package: name=\'.+?\'" | cut -d"=" -f2 | grep -Eo "[0-9A-Za-z\.]+")
   apk_name=$(echo $apk | grep -o '[^/]*$')
 
-  app_name=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt d --values badging $apk | sed -n "/^application: /s/.*label='\([^']*\).*/\1/p")
+  app_name=$($aapt_dir d --values badging $apk | sed -n "/^application: /s/.*label='\([^']*\).*/\1/p")
 
   if [ "$scheme" == "" ]; then
     scheme=$(echo $app_name | tr -d " \t\n\r" | tr '[:upper:]' '[:lower:]' | tr "áéíóúÁÉÍÓÚ" "aeiouAEIOU")
@@ -73,11 +84,12 @@ function set_environment()
 
   git_revision=`git rev-parse --short HEAD`
 
-  artifacts_url="$url/$scheme/$os/$short_version_string/$environment"
+  artifacts_url="$url/$scheme/$os/$ver_path/$environment"
 
   echo "Environment: $environment"
   echo "Scheme: $scheme"
   echo "Version: $short_version_string"
+  echo "Version path: $ver_path"
   echo "Version code: $version_code"
   echo "Package name: $package_name"
   echo "Git Revision: $git_revision"
@@ -401,12 +413,12 @@ EOF
 
 function distribute_app()
 {
-  mkdir -p $out/$scheme/$os/$short_version_string/$environment
-  cp -f $apk $out/$scheme/$os/$short_version_string/$environment/$apk_name
-  cp -f $project_dir/index.html $out/$scheme/$os/$short_version_string/$environment/index.html
-  cp -f $project_dir/icon.png $out/$scheme/$os/$short_version_string/$environment/icon-1.png
-  cp -f $project_dir/icon.png $out/$scheme/$os/$short_version_string/$environment/icon-2.png
-  echo "Create OTA dir: $out/$scheme/$os/$short_version_string/$environment"
+  mkdir -p $out/$scheme/$os/$ver_path/$environment
+  cp -f $apk $out/$scheme/$os/$ver_path/$environment/$apk_name
+  cp -f $project_dir/index.html $out/$scheme/$os/$ver_path/$environment/index.html
+  cp -f $project_dir/icon.png $out/$scheme/$os/$ver_path/$environment/icon-1.png
+  cp -f $project_dir/icon.png $out/$scheme/$os/$ver_path/$environment/icon-2.png
+  echo "Create OTA dir: $out/$scheme/$os/$ver_path/$environment"
   echo $artifacts_url/index.html
 }
 
@@ -435,14 +447,14 @@ function f_gradle() {
 
 function f_image_apk() {
   unzip -o -d ./apk_zip $apk
-  image_folder=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt d --values badging $apk | sed -n "/^application: /s/.*icon='\([^']*xml\).*/\1/p")
+  image_folder=$($aapt_dir d --values badging $apk | sed -n "/^application: /s/.*icon='\([^']*xml\).*/\1/p")
   if [ $image_folder != "" ]; then
     # Case XML defined as launch icon.
-    name_icon=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt d --values badging $apk | sed -n "/^application: /s/.*icon='.*\/\([^']*\).xml'*/\1/p")
+    name_icon=$($aapt_dir d --values badging $apk | sed -n "/^application: /s/.*icon='.*\/\([^']*\).xml'*/\1/p")
     image_folder="res/mipmap-hdpi-v4/$name_icon.png"
   else 
     # Case png defined as main icon.
-    image_folder=$(/Applications/android-sdk-macosx/build-tools/22.0.0/aapt d --values badging $apk | sed -n "/^application: /s/.*icon='\([^']*\).*/\1/p")
+    image_folder=$($aapt_dir d --values badging $apk | sed -n "/^application: /s/.*icon='\([^']*\).*/\1/p")
   fi
   cp ./apk_zip/$image_folder $project_dir/icon.png
 }
