@@ -67,7 +67,7 @@ function describe_workspace()
 {
   #describe the project workspace
   echo "Available schemes"
-  $cli_tools/xcbuild-safe.sh -list -workspace $workspace
+  $cli_tools/xcbuild-safe.sh -list -workspace "$workspace"
 }
 
 function change_pbid()
@@ -76,13 +76,14 @@ function change_pbid()
   new_bundle_id=$2
   old_bundle_id=$(awk -F '=' '/PRODUCT_BUNDLE_IDENTIFIER/ {print $2; exit}' $pbxproj_path)
   echo "Change bundle id from $old_bundle_id to $new_bundle_id"
-  sed -i "" "s/$old_bundle_id/$new_bundle_id;/g" $pbxproj_path
+  sed -i "" "s/$old_bundle_id/$new_bundle_id;/g" "$pbxproj_path"
 }
 
 function set_environment()
 {
   #extract settings from the Info.plist file
-  info_plist_domain=$(ls $app_plist | sed -e 's/\.plist//')
+  info_plist_domain=$(ls "$app_plist" | sed -e 's/\.plist//')
+  
   short_version_string=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$app_plist")
   display_name=$(/usr/libexec/PlistBuddy -c "Print CFBundleDisplayName" "$app_plist")
   bundle_identifier=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" "$app_plist")
@@ -97,15 +98,15 @@ function archive_app()
 #PROVISIONING_PROFILE="$mobileprovision"
   
   # Retrieve provision name
-  security cms -D -i $mobileprovision > prov.plist
+  security cms -D -i "$mobileprovision" > prov.plist
   provision_name=$(/usr/libexec/PlistBuddy -c 'print ":Name"' prov.plist)
 
-  $cli_tools/xcbuild-safe.sh -workspace $workspace -scheme $scheme -sdk "iphoneos" -configuration Distribution CODE_SIGN_IDENTITY="$certificate" PRODUCT_BUNDLE_IDENTIFIER="$bundle_identifier" PROVISIONING_PROFILE_SPECIFIER="$provision_name" OTHER_CODE_SIGN_FLAGS="--keychain $keychain" -archivePath app.xcarchive archive >| output
+  $cli_tools/xcbuild-safe.sh -workspace "$workspace" -scheme "$scheme" -sdk "iphoneos" -configuration Distribution CODE_SIGN_IDENTITY="$certificate" PRODUCT_BUNDLE_IDENTIFIER="$bundle_identifier" PROVISIONING_PROFILE_SPECIFIER="$provision_name" OTHER_CODE_SIGN_FLAGS="--keychain $keychain" -archivePath app.xcarchive archive >| output
 
   if [ $? -ne 0 ]
   then
     cat output
-    failed $current_dir/xcodebuild_archive
+    failed "$current_dir/xcodebuild_archive"
   fi
 
   rm -rf output
@@ -115,13 +116,13 @@ function export_ipa()
 {
   echo "Export as \"$certificate\", embedding provisioning profile $mobileprovision ..."
 
-  $cli_tools/xcbuild-safe.sh -exportArchive -archivePath app.xcarchive -exportPath "$releases_dir"  -exportOptionsPlist $export_options
+  $cli_tools/xcbuild-safe.sh -exportArchive -archivePath app.xcarchive -exportPath "$releases_dir"  -exportOptionsPlist "$export_options"
   PROVISIONING_PROFILE_SPECIFIER="$mobileprovision" >| output
 
   if [ $? -ne 0 ]
   then
     cat output
-    failed $cli_tools/xcodebuild_export
+    failed "$cli_tools/xcodebuild_export"
   fi
 
   rm -rf output
@@ -135,11 +136,11 @@ function check_ipa()
   ipa_file="$scheme.ipa"
   # ipa_file="$module_name.ipa"
 
-  cp $releases_dir/$ipa_file $releases_dir/$scheme-$short_version_string.ipa
+  cp "$releases_dir/$ipa_file" "$releases_dir/$scheme-$short_version_string.ipa"
 
   # Verify .app inside .ipa
-  unzip -qq $releases_dir/$ipa_file -d $releases_dir/content
-  xcrun codesign -dv $releases_dir/content/Payload/$module_name.app >| output
+  unzip -qq "$releases_dir/$ipa_file" -d $releases_dir/content
+  xcrun codesign -dv "$releases_dir/content/Payload/$module_name.app" >| output
 
   if [ $? -ne 0 ]
   then
@@ -149,8 +150,8 @@ function check_ipa()
 
   rm -rf output
   rm -rf app.xcarchive
-  rm -rf $releases_dir/$ipa_file
-  rm -rf $releases_dir/content
+  rm -rf "$releases_dir/$ipa_file"
+  rm -rf "$releases_dir/content"
 }
 
 echo "........ Validate Keychain ........"

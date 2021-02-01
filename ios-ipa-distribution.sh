@@ -50,6 +50,9 @@ function ipa_info()
   bundle_identifier=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$info_plist_domain")
   short_version_string=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$info_plist_domain")
   app_name=$(/usr/libexec/PlistBuddy -c "Print :CFBundleDisplayName" "$info_plist_domain")
+  if [[ $app_name == "" ]]; then 
+    app_name=$(/usr/libexec/PlistBuddy -c "Print :CFBundleName" "$info_plist_domain")
+  fi
   app_url=`echo $app_name | tr "[:upper:]" "[:lower:]" | tr -d ' '`
   app_url=`echo $app_url | tr "áéíóúÁÉÍÓÚ" "aeiouAEIOU" | tr -d ' '`
   git_revision=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$info_plist_domain")
@@ -57,12 +60,34 @@ function ipa_info()
   version_path=$short_version_string
   artifacts_url="$url/$app_url/ios/$version_path/$environment"
 
-  xcrun -sdk iphoneos pngcrush \
- -revert-iphone-optimizations -q Payload/*.app/AppIcon40x40@2x.png $ci_dir/icon-1.png
-  xcrun -sdk iphoneos pngcrush \
- -revert-iphone-optimizations -q Payload/*.app/AppIcon60x60@2x.png $ci_dir/icon-2.png
- xcrun -sdk iphoneos pngcrush \
- -revert-iphone-optimizations -q Payload/*.app/LaunchImage-700-568h@2x.png $ci_dir/launchimage.png
+
+  # Old structure.
+  icon_path_a="AppIcon40x40@2x.png"
+  icon_path_b="AppIcon60x60@2x.png"
+
+  result=$(xcrun -sdk iphoneos pngcrush -revert-iphone-optimizations -q Payload/*.app/$icon_path_a "$ci_dir/icon-1.png")
+  if [[ $result != "" ]]; then
+    echo "$result"
+    # More recent structures contains different icons.
+    icon_path_a="AppIcon60x60@2x.png"
+    icon_path_b="AppIcon76x76@2x~ipad.png"
+
+    result=$(xcrun -sdk iphoneos pngcrush -revert-iphone-optimizations -q Payload/*.app/$icon_path_a "$ci_dir/icon-1.png")
+  fi
+
+  result=$(xcrun -sdk iphoneos pngcrush -revert-iphone-optimizations -q Payload/*.app/$icon_path_b "$ci_dir/icon-2.png")
+
+  # Old structure
+  launch_image_path="LaunchImage-700-568h@2x.png"
+
+  result=$(xcrun -sdk iphoneos pngcrush -revert-iphone-optimizations -q Payload/*.app/$launch_image_path "$ci_dir/launchimage.png")
+  if [[ $result != "" ]]; then 
+    echo "$result"
+    # More recent structure.
+    launch_image_path="Default-568h@2x.png"
+
+    result=$(xcrun -sdk iphoneos pngcrush -revert-iphone-optimizations -q Payload/*.app/$launch_image_path "$ci_dir/launchimage.png")
+  fi
 
   echo "Firmado por: $certificateSubject"
   echo "Certificado de distribución válido hasta: $expirationDate"
@@ -464,6 +489,9 @@ function distribute_app()
     cp -f $ci_dir/launchimage.png $out/$app_url/ios/$version_path/$environment/launchimage.png
     rm $ci_dir/app.plist
     rm $ci_dir/index.html
+    rm "$ci_dir/launchimage.png"
+    rm "$ci_dir/icon-2.png"
+    rm "$ci_dir/icon-1.png"
     #echo "Create OTA URL: $artifacts_url"
 }
 
