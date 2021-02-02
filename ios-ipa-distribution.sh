@@ -67,7 +67,6 @@ function ipa_info()
 
   result=$(xcrun -sdk iphoneos pngcrush -revert-iphone-optimizations -q Payload/*.app/$icon_path_a "$ci_dir/icon-1.png")
   if [[ $result != "" ]]; then
-    echo "$result"
     # More recent structures contains different icons.
     icon_path_a="AppIcon60x60@2x.png"
     icon_path_b="AppIcon76x76@2x~ipad.png"
@@ -82,7 +81,6 @@ function ipa_info()
 
   result=$(xcrun -sdk iphoneos pngcrush -revert-iphone-optimizations -q Payload/*.app/$launch_image_path "$ci_dir/launchimage.png")
   if [[ $result != "" ]]; then 
-    echo "$result"
     # More recent structure.
     launch_image_path="Default-568h@2x.png"
 
@@ -489,10 +487,13 @@ function distribute_app()
     cp -f $ci_dir/launchimage.png $out/$app_url/ios/$version_path/$environment/launchimage.png
     rm $ci_dir/app.plist
     rm $ci_dir/index.html
+    #echo "Create OTA URL: $artifacts_url"
+}
+
+function cleanup() {
     rm "$ci_dir/launchimage.png"
     rm "$ci_dir/icon-2.png"
     rm "$ci_dir/icon-1.png"
-    #echo "Create OTA URL: $artifacts_url"
 }
 
 function jenkins_summary()
@@ -532,6 +533,7 @@ else
     distribute_app
     echo "$app_name: $artifacts_url"
   fi
+  cleanup
   jenkins_summary
   echo
   echo "................................."
