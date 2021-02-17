@@ -248,6 +248,7 @@ header a {
 .icon {
   background: #fff url(./icon-1.png) no-repeat 50% 50%;
   border: 1px solid #ddd;
+  background-size: 100%;
   border-radius: 8px;
   display: block;
   float: left; 
