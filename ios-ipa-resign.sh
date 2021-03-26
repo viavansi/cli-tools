@@ -16,7 +16,7 @@ function show_usage() {
     echo "usage: $program_name param1 param2 param3"
     echo "param1:	.ipa path"
     echo "param2:	Distribution certificate alias"
-    echo "param3:	Distribution mobileprovision path"
+    echo "param3:	(optional) Distribution mobileprovision path"
     echo "param4: (optional) entitlements.plist path"
     echo "param5: (optional) new bundle id"
     echo "param6: (optional) new version number"
@@ -34,26 +34,30 @@ function resign_app()
   #echo "remove old CodeSignature"
   rm -r "Payload/$target/_CodeSignature" "Payload/$target/CodeResources" 2> /dev/null | true
 
-  echo "replace embedded mobile provisioning profile"
-  cp "$mobileprovision" "Payload/$target/embedded.mobileprovision"
+  # Provisioning profile used for signature is inside the .ipa, renamed as embedded.mobileprovision
+  if [ -f "${mobileprovision}"]; then 
+    echo "replace embedded mobile new provisioning profile"
+    cp "$mobileprovision" "Payload/$target/embedded.mobileprovision"
+  else
+    echo "reuse provisioning profile"
+  fi
 
+  # For version, build number and app_id, we can modify the inner .plist with the new values.
   if [ -n "${bundle_id}" ]; then
     echo "change the BUNDLE_ID to $bundle_id"
     /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $bundle_id" "Payload/$target/Info.plist"
   fi
-
   if [ -n "${version}" ]; then
     echo "change the version to $version"
     /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $version" "Payload/$target/Info.plist"
   fi
-
   if [ -n "${compilation}" ]; then
     echo "change the build version to $compilation"
     /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $compilation" "Payload/$target/Info.plist"
   fi
 
-  #echo "re-sign"
-  if [ -n "${entitlements}" ]; then
+  # The entitlements, if provided, is an additional parameter to codesign command.
+  if [ -f "${entitlements}" ]; then
     echo "resign with $entitlements"
     rm Payload/$target/entitlements.plist
     cp $entitlements Payload/$target/entitlements.plist
@@ -83,7 +87,7 @@ function app_backup()
   #echo "copy $app in $backup"
 }
 
-if [ "$#" -lt 3 ]; then
+if [ "$#" -lt 2 ]; then
     show_usage
 else
   echo
