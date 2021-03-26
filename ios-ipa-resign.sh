@@ -20,6 +20,7 @@ function show_usage() {
     echo "param4: (optional) entitlements.plist path"
     echo "param5: (optional) new bundle id"
     echo "param6: (optional) new version number"
+    echo "param7: (optional) new build number"
     echo "use \" \" in params with white spaces"
     exit 1
 }
@@ -36,23 +37,23 @@ function resign_app()
   echo "replace embedded mobile provisioning profile"
   cp "$mobileprovision" "Payload/$target/embedded.mobileprovision"
 
-  if [ $bundle_id != '' ]; then
+  if [ -n "${bundle_id}" ]; then
     echo "change the BUNDLE_ID to $bundle_id"
     /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $bundle_id" "Payload/$target/Info.plist"
   fi
 
-  if [ $version ]; then
+  if [ -n "${version}" ]; then
     echo "change the version to $version"
     /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $version" "Payload/$target/Info.plist"
   fi
 
-  if [ $compilation ]; then
-    echo "change the compilation version to $compilation"
+  if [ -n "${compilation}" ]; then
+    echo "change the build version to $compilation"
     /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $compilation" "Payload/$target/Info.plist"
   fi
 
   #echo "re-sign"
-  if [ $entitlements != '' ]; then
+  if [ -n "${entitlements}" ]; then
     echo "resign with $entitlements"
     rm Payload/$target/entitlements.plist
     cp $entitlements Payload/$target/entitlements.plist
