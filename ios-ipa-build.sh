@@ -133,8 +133,8 @@ function check_ipa()
   echo "Checking $releases_dir/$module_name.ipa ..."
 
   # Version copy of the .ipa
-  ipa_file="$scheme.ipa"
-  # ipa_file="$module_name.ipa"
+  #ipa_file="$scheme.ipa"
+   ipa_file="$module_name.ipa"
 
   cp "$releases_dir/$ipa_file" "$releases_dir/$scheme-$short_version_string.ipa"
 
@@ -164,6 +164,7 @@ set_environment
 echo
 echo "........ Archive ........"
 echo
+security unlock-keychain -p "$password" "$keychain"
 archive_app
 echo
 echo "........ Export ........"

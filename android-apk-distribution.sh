@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 
 # aapt location, needed to extract the information from the apk. Depending of the aapt version, some steps may fail.
 export PATH=$PATH:/Applications/android-sdk-macosx/build-tools/22.0.0
@@ -17,12 +17,12 @@ version_path=$7
 # Configuration
 project_dir=`pwd`
 os="android"
-aapt_dir="/Applications/android-sdk-macosx/build-tools/22.0.0/aapt"
+aapt_dir="/Applications/android-sdk-macosx/build-tools/29.0.2/aapt"
 
 function show_usage() {
   echo "usage: $program_name param1 param2 param3"
-  echo "param1:	.apk path"
-  echo "param2:	environment"
+  echo "param1: .apk path"
+  echo "param2: environment"
   echo "param3: base url"
   echo "param4: output directory"
   echo "param5: developer company"
@@ -54,10 +54,10 @@ function set_environment()
 
   if [ "$version_path" == "" ]; then
     ver_path=$short_version_string
-  else  
+  else
     ver_path=$version_path
   fi
-  
+
   version_code=$($aapt_dir dump badging $apk | grep -Eo "versionCode=\'.*?\'" | cut -d"=" -f2 | grep -Eo "[0-9]+")
   package_name=$($aapt_dir dump badging $apk | grep -Eo "package: name=\'.+?\'" | cut -d"=" -f2 | grep -Eo "[0-9A-Za-z\.]+")
   apk_name=$(echo $apk | grep -o '[^/]*$')
@@ -120,9 +120,9 @@ function build_ota_page()
     margin: 0 auto;
     width: 1170px;
   }
-  .full, 
-  .half, 
-  .third, 
+  .full,
+  .half,
+  .third,
   .quarter {
     float: left;
   }
@@ -156,7 +156,7 @@ function build_ota_page()
   font-size: 16px;
 }
 li {
-  list-style: none; 
+  list-style: none;
   padding: .25em 0em;
 }
 header {
@@ -251,7 +251,7 @@ header a {
   background-size: 100%;
   border-radius: 8px;
   display: block;
-  float: left; 
+  float: left;
   height: 57px;
   margin: 15px 0.5em 15px 1em;
   width: 57px;
@@ -383,7 +383,7 @@ header a {
         </div>
       </section>
       <section class="full help center" id="help">
-        <h2 class="left">Cómo instalar aplicaciones desde orígenes desconocidos</h3> 
+        <h2 class="left">Cómo instalar aplicaciones desde orígenes desconocidos</h3>
         <ul>
           <li class="illustration third">
             <h3>1. Accede a Settings</h3>
@@ -414,13 +414,27 @@ EOF
 
 function distribute_app()
 {
-  mkdir -p $out/$scheme/$os/$ver_path/$environment
-  cp -f $apk $out/$scheme/$os/$ver_path/$environment/$apk_name
-  cp -f $project_dir/index.html $out/$scheme/$os/$ver_path/$environment/index.html
-  cp -f $project_dir/icon.png $out/$scheme/$os/$ver_path/$environment/icon-1.png
-  cp -f $project_dir/icon.png $out/$scheme/$os/$ver_path/$environment/icon-2.png
-  echo "Create OTA dir: $out/$scheme/$os/$ver_path/$environment"
-  echo $artifacts_url/index.html
+	echo "Distribute app:  $out/$app_url/ios/$version_path/$environment/"
+    export
+    firstChar=${out:1}
+    if [[ $firstChar != "/" ]] ;
+    then
+       echo "ftp transfer to :$out"
+       sshpass -p $PUBLISH_PASSWORD ssh -t $PUBLISH_USER@$PUBLISH_SERVER mkdir -p $out/$scheme/$os/$ver_path/$environment/
+       sshpass -p $PUBLISH_PASSWORD scp $apk $PUBLISH_USER@$PUBLISH_SERVER:$out/$scheme/$os/$ver_path/$environment/$apk_name
+       sshpass -p $PUBLISH_PASSWORD scp $project_dir/index.html $PUBLISH_USER@$PUBLISH_SERVER:$out/$scheme/$os/$ver_path/$environment/index.html
+       sshpass -p $PUBLISH_PASSWORD scp $project_dir/icon.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$scheme/$os/$ver_path/$environment/icon-1.png
+       sshpass -p $PUBLISH_PASSWORD scp $project_dir/icon.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$scheme/$os/$ver_path/$environment/icon-2.png
+    else
+  		mkdir -p $out/$scheme/$os/$ver_path/$environment
+  		cp -f $apk $out/$scheme/$os/$ver_path/$environment/$apk_name
+  		cp -f $project_dir/index.html $out/$scheme/$os/$ver_path/$environment/index.html
+  		cp -f $project_dir/icon.png $out/$scheme/$os/$ver_path/$environment/icon-1.png
+  		cp -f $project_dir/icon.png $out/$scheme/$os/$ver_path/$environment/icon-2.png
+  		echo "Create OTA dir: $out/$scheme/$os/$ver_path/$environment"
+  
+	fi
+	echo $artifacts_url/index.html
 }
 
 function clean_up() {
@@ -453,7 +467,7 @@ function f_image_apk() {
     # Case XML defined as launch icon.
     name_icon=$($aapt_dir d --values badging $apk | sed -n "/^application: /s/.*icon='.*\/\([^']*\).xml'*/\1/p")
     image_folder="res/mipmap-hdpi-v4/$name_icon.png"
-  else 
+  else
     # Case png defined as main icon.
     image_folder=$($aapt_dir d --values badging $apk | sed -n "/^application: /s/.*icon='\([^']*\).*/\1/p")
   fi

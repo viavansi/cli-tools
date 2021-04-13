@@ -35,7 +35,7 @@ function resign_app()
   rm -r "Payload/$target/_CodeSignature" "Payload/$target/CodeResources" 2> /dev/null | true
 
   # Provisioning profile used for signature is inside the .ipa, renamed as embedded.mobileprovision
-  if [ -f "${mobileprovision}"]; then 
+  if [ -f "${mobileprovision}" ]; then 
     echo "replace embedded mobile new provisioning profile"
     cp "$mobileprovision" "Payload/$target/embedded.mobileprovision"
   else

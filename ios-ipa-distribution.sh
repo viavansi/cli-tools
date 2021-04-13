@@ -478,15 +478,33 @@ EOF
 
 function distribute_app()
 {
-    mkdir -p $out/$app_url/ios/$version_path/$environment/
-    cp -f $ipa $out/$app_url/ios/$version_path/$environment/app.ipa
-    cp -f $ci_dir/app.plist  $out/$app_url/ios/$version_path/$environment/app.plist
-    cp -f $ci_dir/index.html $out/$app_url/ios/$version_path/$environment/index.html
-    cp -f $ci_dir/icon-1.png $out/$app_url/ios/$version_path/$environment/icon-1.png
-    cp -f $ci_dir/icon-2.png $out/$app_url/ios/$version_path/$environment/icon-2.png
-    cp -f $ci_dir/launchimage.png $out/$app_url/ios/$version_path/$environment/launchimage.png
+    echo "Distribute app:  $out/$app_url/ios/$version_path/$environment/"
+    export
+    firstChar=${out:1}
+    if [[ $firstChar != "/" ]] ;
+    then
+       echo "ftp transfer to :$out"
+       sshpass -p $PUBLISH_PASSWORD ssh -t $PUBLISH_USER@$PUBLISH_SERVER mkdir -p $out/$app_url/ios/$version_path/$environment/
+       sshpass -p $PUBLISH_PASSWORD scp $ipa $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/ios/$version_path/$environment/app.ipax
+       sshpass -p $PUBLISH_PASSWORD scp $ci_dir/app.plist $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/ios/$version_path/$environment/app.plist
+       sshpass -p $PUBLISH_PASSWORD scp $ci_dir/index.html $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/ios/$version_path/$environment/index.html
+       sshpass -p $PUBLISH_PASSWORD scp $ci_dir/icon-1.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/ios/$version_path/$environment/icon-1.png
+       sshpass -p $PUBLISH_PASSWORD scp $ci_dir/icon-2.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/ios/$version_path/$environment/icon-2.png
+       sshpass -p $PUBLISH_PASSWORD scp $ci_dir/launchimage.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/ios/$version_path/$environment/launchimage.png
+    else
+       echo "copy transfer to :$out"
+       mkdir -p $out/$app_url/ios/$version_path/$environment/
+       cp -f $ipa $out/$app_url/ios/$version_path/$environment/app.ipax
+       cp -f $ci_dir/app.plist  $out/$app_url/ios/$version_path/$environment/app.plist
+       cp -f $ci_dir/index.html $out/$app_url/ios/$version_path/$environment/index.html
+       cp -f $ci_dir/icon-1.png $out/$app_url/ios/$version_path/$environment/icon-1.png
+       cp -f $ci_dir/icon-2.png $out/$app_url/ios/$version_path/$environment/icon-2.png
+       cp -f $ci_dir/launchimage.png $out/$app_url/ios/$version_path/$environment/launchimage.png
+    fi
+    
     rm $ci_dir/app.plist
     rm $ci_dir/index.html
+    
     #echo "Create OTA URL: $artifacts_url"
 }
 
