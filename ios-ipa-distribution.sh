@@ -485,7 +485,7 @@ function distribute_app()
     then
        echo "ftp transfer to :$out"
        sshpass -p $PUBLISH_PASSWORD ssh -t $PUBLISH_USER@$PUBLISH_SERVER mkdir -p $out/$app_url/ios/$version_path/$environment/
-       sshpass -p $PUBLISH_PASSWORD scp $ipa $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/ios/$version_path/$environment/app.ipax
+       sshpass -p $PUBLISH_PASSWORD scp $ipa $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/ios/$version_path/$environment/app.ipa
        sshpass -p $PUBLISH_PASSWORD scp $ci_dir/app.plist $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/ios/$version_path/$environment/app.plist
        sshpass -p $PUBLISH_PASSWORD scp $ci_dir/index.html $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/ios/$version_path/$environment/index.html
        sshpass -p $PUBLISH_PASSWORD scp $ci_dir/icon-1.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/ios/$version_path/$environment/icon-1.png
@@ -494,7 +494,7 @@ function distribute_app()
     else
        echo "copy transfer to :$out"
        mkdir -p $out/$app_url/ios/$version_path/$environment/
-       cp -f $ipa $out/$app_url/ios/$version_path/$environment/app.ipax
+       cp -f $ipa $out/$app_url/ios/$version_path/$environment/app.ipa
        cp -f $ci_dir/app.plist  $out/$app_url/ios/$version_path/$environment/app.plist
        cp -f $ci_dir/index.html $out/$app_url/ios/$version_path/$environment/index.html
        cp -f $ci_dir/icon-1.png $out/$app_url/ios/$version_path/$environment/icon-1.png
