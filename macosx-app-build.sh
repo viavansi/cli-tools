@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 
 # Remove CODE_SIGN_RESOURCE_RULES_PATH=$(SDKROOT)/ResourceRules.plist
 # Find the   /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/PackageApplication script and update it.
@@ -67,15 +67,6 @@ function describe_workspace()
   xcodebuild -list -workspace $workspace
 }
 
-function set_environment()
-{
-  #extract settings from the Info.plist file
-  info_plist_domain=$(ls $app_plist | sed -e 's/\.plist//')
-  short_version_string=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$app_plist")
-  bundle_identifier=$(/usr/libexec/PlistBuddy -c "Print CFBundleDisplayName" "$app_plist")
-  echo "$bundle_identifier ($scheme) version $short_version_string"
-}
-
 function archive_app()
 {
   echo "Archive as \"$certificate\", embedding provisioning profile $mobileprovision ..."
@@ -111,35 +102,9 @@ function export_app()
   rm -rf output
 }
 
-function check_ipa()
-{
-  echo "Checking $releases_dir/$scheme-$short_version_string.ipa ..."
-
-  cp $releases_dir/$scheme.ipa $releases_dir/$scheme-$short_version_string.ipa
-
-  mv $releases_dir/$scheme.ipa $releases_dir/$scheme.zip
-  unzip -qq $releases_dir/$scheme.zip -d $releases_dir/
-  xcrun codesign -dv $releases_dir/Payload/$targetName.app >| output
-
-  if [ $? -ne 0 ]
-  then
-    cat output
-    failed xcodebuild_export
-  fi
-
-  rm -rf output
-  rm -rf app.xcarchive
-  rm -rf $releases_dir/$scheme.zip
-  rm -rf $releases_dir/Payload
-}
-
 echo "........ Validate Keychain ........"
 echo
 validate_keychain
-echo
-echo "........ Set Environment ........"
-echo
-set_environment
 echo
 echo "........ Archive ........"
 echo
@@ -149,8 +114,3 @@ echo "........ Export ........"
 echo
 export_app
 echo
-#echo "........ Check ........"
-#echo
-#check_ipa
-#echo
-#echo "......................."

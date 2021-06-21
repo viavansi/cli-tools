@@ -330,17 +330,38 @@ EOF
 
 function distribute_app()
 {
-    mkdir -p $out/$app_url/macos/$version/$environment/
-    cp -f $dmg $out/$app_url/macos/$version/$environment/$app_url.dmg
-    if [ $pkg ]; then
-      cp -f $pkg $out/$app_url/macos/$version/$environment/$app_url.pkg
+    echo "Distribute app:  $out/$app_url/ios/$version_path/$environment/"
+    export
+    firstChar=${out:0:1}
+    if [[ $firstChar != "/" ]] ;
+    then
+      echo "ftp transfer to :$out"
+      sshpass -p $PUBLISH_PASSWORD ssh -t $PUBLISH_USER@$PUBLISH_SERVER mkdir -p $out/$app_url/macos/$version/$environment/
+      sshpass -p $PUBLISH_PASSWORD scp $dmg $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/macos/$version/$environment/$app_url.dmg
+      if [ $pkg ]; then
+        sshpass -p $PUBLISH_PASSWORD scp $pkg $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/macos/$version/$environment/$app_url.pkg
+      fi
+      sshpass -p $PUBLISH_PASSWORD scp $current_dir/index.html $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/macos/$version/$environment/index.html
+      sshpass -p $PUBLISH_PASSWORD scp $current_dir/icon-1.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/macos/$version/$environment/icon-1.png
+      sshpass -p $PUBLISH_PASSWORD scp $current_dir/icon-2.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/macos/$version/$environment/icon-2.png
+    else
+      echo "copy transfer to :$out"
+      mkdir -p $out/$app_url/macos/$version/$environment/
+      cp -f $dmg $out/$app_url/macos/$version/$environment/$app_url.dmg
+      if [ $pkg ]; then
+        cp -f $pkg $out/$app_url/macos/$version/$environment/$app_url.pkg
+      fi
+      cp -f $current_dir/index.html $out/$app_url/macos/$version/$environment/index.html
+      cp -f $current_dir/icon-1.png $out/$app_url/macos/$version/$environment/icon-1.png
+      cp -f $current_dir/icon-2.png $out/$app_url/macos/$version/$environment/icon-2.png
+      #cp -f $current_dir/launchimage.png $out/$app_url/ios/$short_version_string/$environment/launchimage.png
     fi
-    cp -f $current_dir/index.html $out/$app_url/macos/$version/$environment/index.html
-    cp -f $current_dir/icon-1.png $out/$app_url/macos/$version/$environment/icon-1.png
-    cp -f $current_dir/icon-2.png $out/$app_url/macos/$version/$environment/icon-2.png
-    #cp -f $current_dir/launchimage.png $out/$app_url/ios/$short_version_string/$environment/launchimage.png
-    rm $current_dir/index.html
-    echo "Create URL: $url/$app_url/macos/$version/$environment/"
+    
+    rm $ci_dir/app.plist
+    rm $ci_dir/index.html
+    
+    #echo "Create OTA URL: $artifacts_url"
+
 }
 
 
