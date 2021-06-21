@@ -360,7 +360,7 @@ function distribute_app()
     rm $ci_dir/app.plist
     rm $ci_dir/index.html
     
-    #echo "Create OTA URL: $artifacts_url"
+    echo "Create URL: $url/$app_url/macos/$version/$environment/"
 
 }
 
