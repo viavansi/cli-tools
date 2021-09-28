@@ -13,6 +13,7 @@ out=$4
 developer=$5
 scheme=$6
 version_path=$7
+aab_path=$8
 
 # Configuration
 project_dir=`pwd`
@@ -414,19 +415,25 @@ EOF
 
 function distribute_app()
 {
-	echo "Distribute app:  $out/$app_url/ios/$version_path/$environment/"
+	echo "Distribute app:  $out/$app_url/android/$version_path/$environment/"
     export
     firstChar=${out:1}
     if [[ $firstChar != "/" ]] ;
     then
        echo "ftp transfer to :$out"
        sshpass -p $PUBLISH_PASSWORD ssh -t $PUBLISH_USER@$PUBLISH_SERVER mkdir -p $out/$scheme/$os/$ver_path/$environment/
+       if [[ $aab_path != "" ]]; then
+        sshpass -p $PUBLISH_PASSWORD scp $aab_path $PUBLISH_USER@$PUBLISH_SERVER:$out/$scheme/$os/$ver_path/$environment/app.aab
+       fi
        sshpass -p $PUBLISH_PASSWORD scp $apk $PUBLISH_USER@$PUBLISH_SERVER:$out/$scheme/$os/$ver_path/$environment/$apk_name
        sshpass -p $PUBLISH_PASSWORD scp $project_dir/index.html $PUBLISH_USER@$PUBLISH_SERVER:$out/$scheme/$os/$ver_path/$environment/index.html
        sshpass -p $PUBLISH_PASSWORD scp $project_dir/icon.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$scheme/$os/$ver_path/$environment/icon-1.png
        sshpass -p $PUBLISH_PASSWORD scp $project_dir/icon.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$scheme/$os/$ver_path/$environment/icon-2.png
     else
   		mkdir -p $out/$scheme/$os/$ver_path/$environment
+      if [[ $aab_path != "" ]]; then
+        cp -f $aab_path $out/$scheme/$os/$ver_path/$environment/app.aab
+      fi
   		cp -f $apk $out/$scheme/$os/$ver_path/$environment/$apk_name
   		cp -f $project_dir/index.html $out/$scheme/$os/$ver_path/$environment/index.html
   		cp -f $project_dir/icon.png $out/$scheme/$os/$ver_path/$environment/icon-1.png
