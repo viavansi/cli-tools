@@ -10,7 +10,7 @@ COPY ./flutter_project ./flutter_project
 RUN /bin/bash -c '(cd flutter_project; \
 flutter clean; \
 flutter build apk; \
-cp **/*.apk /app; )'
+cp build/app/outputs/apk/release/*.apk /app; )'
 RUN ["/bin/bash", "-c", "./gen_apk_html.sh *.apk"]
 
 #Production environment
