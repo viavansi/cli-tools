@@ -371,7 +371,7 @@ if [ ! -z "${EULA_RSRC}" -a "${EULA_RSRC}" != "-null-" ]; then
   if [ $BREW_INSTALL -eq 0 ]; then
     "${AUX_PATH}/dmg-license.py" "${DMG_DIR}/${DMG_NAME}" "${EULA_RSRC}" ${REZ_ARG}
   else
-    python - "${DMG_DIR}/${DMG_NAME}" "${EULA_RSRC}" ${REZ_ARG} <<-'EOS'
+    python3 - "${DMG_DIR}/${DMG_NAME}" "${EULA_RSRC}" ${REZ_ARG} <<-'EOS'
     # BREW_INLINE_LICENSE_PLACEHOLDER
 EOS
   fi
