@@ -21,8 +21,8 @@ TODO
 
 ## Before running the executable on your linux machine
 The executable binary can be found in your project under `build/linux/<build mode>/bundle/`. Alongside your executable binary in the bundle directory there are two directories:
-  -`lib` contains the required .so library files
-  -`data` contains the application’s data assets, such as fonts or images
+* `lib` contains the required .so library files
+* `data` contains the application’s data assets, such as fonts or images
 
 In addition to these files, your application also relies on various operating system libraries that it’s been compiled against.
 
