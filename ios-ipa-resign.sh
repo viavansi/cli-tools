@@ -68,11 +68,12 @@ function resign_app()
   fi
 
   #echo "re-package"
-  zip -qr "app-resigned.ipa" Payload > /dev/null
+  zip -qr "app-resigned.ipa" Payload SwiftSupportt > /dev/null
   mv "app-resigned.ipa" "$app" > /dev/null
 
   #echo "remove unzip folder"
   rm -rf Payload > /dev/null
+  rm -rf SwiftSupport > /dev/null # Only if the project uses Swift
 
   #echo "ReSign Complete!"
 }

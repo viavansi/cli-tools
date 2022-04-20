@@ -97,6 +97,7 @@ function ipa_info()
   echo "Git Revision: $git_revision"
 
   rm -rf Payload
+  rm -rf SwiftSupport
   rm info-app.ipa
 }
 
