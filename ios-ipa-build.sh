@@ -23,6 +23,7 @@ mobileprovision=${7}
 releases_dir=${8}
 export_options=${9}
 module_name=${10} # The name of the target in XCode.
+entitlements_plist=${11}
 
 cli_tools="$HOME/cli-tools"
 # cli_tools="/Users/elage/Developer/Utilities/cli-tools"
@@ -128,11 +129,19 @@ function archive_app()
   # Retrieve provision name
   security cms -D -i "$mobileprovision" > prov.plist
   provision_name=$(/usr/libexec/PlistBuddy -c 'print ":Name"' prov.plist)
+  declare -a team_identifiers=$(/usr/libexec/PlistBuddy -c 'print ":TeamIdentifier"' prov.plist | sed -e 1d -e '$d')
+  team_identifier=`echo ${team_identifiers[0]}`
+
+  # Extract entitlements from provisioning if not provided
+  if [ -z "$entitlements_plist" ]; then
+    entitlements_plist="entitlements_tmp.plist"
+    /usr/libexec/PlistBuddy -x -c 'Print:Entitlements' prov.plist > $entitlements_plist
+  fi
 
   if [ $project ]; then
-    $cli_tools/xcbuild-safe.sh -project "$project" -scheme "$scheme" -sdk "iphoneos" CODE_SIGN_IDENTITY="$certificate" PROVISIONING_PROFILE_SPECIFIER="$provision_name" OTHER_CODE_SIGN_FLAGS="--keychain $keychain" -archivePath app.xcarchive archive >| output
+    $cli_tools/xcbuild-safe.sh -project "$project" -scheme "$scheme" -sdk "iphoneos" CODE_SIGN_IDENTITY="$certificate" DEVELOPMENT_TEAM=$team_identifier CODE_SIGN_ENTITLEMENTS="$entitlements_plist" PROVISIONING_PROFILE_SPECIFIER="$provision_name" OTHER_CODE_SIGN_FLAGS="--keychain $keychain" -archivePath app.xcarchive archive >| output
   else
-    $cli_tools/xcbuild-safe.sh -workspace "$workspace" -scheme "$scheme" -sdk "iphoneos" -configuration Distribution CODE_SIGN_IDENTITY="$certificate" PRODUCT_BUNDLE_IDENTIFIER="$bundle_identifier" PROVISIONING_PROFILE_SPECIFIER="$provision_name" OTHER_CODE_SIGN_FLAGS="--keychain $keychain" -archivePath app.xcarchive archive >| output
+    $cli_tools/xcbuild-safe.sh -workspace "$workspace" -scheme "$scheme" -sdk "iphoneos" -configuration Distribution CODE_SIGN_IDENTITY="$certificate" PRODUCT_BUNDLE_IDENTIFIER="$bundle_identifier" DEVELOPMENT_TEAM=$team_identifier CODE_SIGN_ENTITLEMENTS="$entitlements_plist" PROVISIONING_PROFILE_SPECIFIER="$provision_name" OTHER_CODE_SIGN_FLAGS="--keychain $keychain" -archivePath app.xcarchive archive >| output
   fi
 
   if [ $? -ne 0 ]
@@ -141,12 +150,15 @@ function archive_app()
     failed "$current_dir/xcodebuild_archive"
   fi
 
+  rm -rf prov.plist
+  rm -rf entitlements_tmp.plist
   rm -rf output
 }
 
 function export_ipa()
 {
   echo "Export as \"$certificate\", embedding provisioning profile $mobileprovision ..."
+  /usr/libexec/PlistBuddy -c "Set :teamID $team_identifier" "$export_options"
 
   $cli_tools/xcbuild-safe.sh -exportArchive -archivePath app.xcarchive -exportPath "$releases_dir"  -exportOptionsPlist "$export_options"
   PROVISIONING_PROFILE_SPECIFIER="$mobileprovision" >| output
