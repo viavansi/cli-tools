@@ -7,7 +7,7 @@ First, you'll need to build the docker image. For that, cd to the directory cont
 docker build -t <name> .
 ```
 
-Now you can used the image you built to compile your flutter project. Make sure you change `path/to/project` so that it points to your project (use absolute paths). Tell docker the `<name>`of the image you intend to use (the one we built in the previous step).
+Now you can use the image you built to compile your flutter project. Make sure you change `path/to/project` so that it points to your project (use absolute paths). Tell docker the `<name>`of the image you intend to use (the one we built in the previous step).
 ```bash
 docker run --rm -it -v path/to/project:/build --workdir /build <name> flutter build linux
 ```
@@ -21,10 +21,8 @@ TODO
 
 ## Before running the executable on your linux machine
 The executable binary can be found in your project under `build/linux/<build mode>/bundle/`. Alongside your executable binary in the bundle directory there are two directories:
-\begin{enumerate}
-    \item lib contains the required .so library files
-    \item data contains the application’s data assets, such as fonts or images
-\end{enumerate}
+  -`lib` contains the required .so library files
+  -`data` contains the application’s data assets, such as fonts or images
 
 In addition to these files, your application also relies on various operating system libraries that it’s been compiled against.
 
