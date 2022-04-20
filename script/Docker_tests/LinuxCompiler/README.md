@@ -7,21 +7,20 @@ First, you'll need to build the docker image. For that, cd to the directory cont
 docker build -t <name> .
 ```
 
-
-Now you can used the image you built to compile your flutter project. Make sure you change `path/to/project` so that it points to your project; use absolute paths. Tell docker the `<name>`of the image you intend to use (the one in the previous step).
+Now you can used the image you built to compile your flutter project. Make sure you change `path/to/project` so that it points to your project (use absolute paths). Tell docker the `<name>`of the image you intend to use (the one we built in the previous step).
 ```bash
 docker run --rm -it -v path/to/project:/build --workdir /build <name> flutter build linux
 ```
-NOTE: Your should have added linux support to your flutter project. If you haven't done it already, cd to your project and do:
+NOTE: You should have added linux support to your flutter project prior to this step. If you haven't done it already do:
 ```bash
-flutter create --platforms=linux .
+docker run --rm -it -v path/to/project:/build --workdir /build <name> flutter create --platforms=linux .
 ```
 
 ## Publish your .desktop to an html
 TODO
 
-## Run the compiled binary
-The executable binary can be found in your project under build/linux/<build mode>/bundle/. Alongside your executable binary in the bundle directory there are two directories:
+## Before running the executable on your linux machine
+The executable binary can be found in your project under `build/linux/<build mode>/bundle/`. Alongside your executable binary in the bundle directory there are two directories:
 \begin{enumerate}
     \item lib contains the required .so library files
     \item data contains the application’s data assets, such as fonts or images
