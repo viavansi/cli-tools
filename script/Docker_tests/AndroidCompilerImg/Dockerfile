@@ -4,13 +4,14 @@ FROM cirrusci/flutter:stable as build
 WORKDIR /app
 #Config Environment
 ENV PATH="${ANDROID_SDK_ROOT}/build-tools/${ANDROID_BUILD_TOOLS_VERSION}:${PATH}"
-COPY gen_apk_html.sh prueba.apk ./
+COPY gen_apk_html.sh ./
 COPY ./flutter_project ./flutter_project
 #RUN /bin/bash -c 'flutter upgrade'
 RUN /bin/bash -c '(cd flutter_project && \
 flutter clean && \
-flutter build apk && \
-cp build/app/outputs/apk/release/*.apk /app; )'
+if flutter build apk ; \
+then cp build/app/outputs/apk/release/*.apk /app ; \
+else echo "Build failed" ; fi )'
 RUN ["/bin/bash", "-c", "./gen_apk_html.sh *.apk"]
 
 #Production environment
