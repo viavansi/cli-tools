@@ -5,7 +5,7 @@ WORKDIR /app
 #Config Environment
 ENV PATH="${ANDROID_SDK_ROOT}/build-tools/${ANDROID_BUILD_TOOLS_VERSION}:${PATH}"
 COPY gen_apk_html.sh ./
-COPY ./flutter_project ./flutter_project
+COPY ${proj_path} ./flutter_project
 #RUN /bin/bash -c 'flutter upgrade'
 RUN /bin/bash -c '(cd flutter_project && \
 flutter clean && \
