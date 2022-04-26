@@ -1,5 +1,5 @@
 # How to use the image
-
+NOTE: Compilation works for some reason; however, the steps followed to compile (written below; take a look!) I believe are not wrong. Need further investigation.
 ## Build your project
 
 First, you'll need to build the docker image. For that, cd to the directory containing the dockerfile and use the following command (you should give a `<name>` to your image):  
