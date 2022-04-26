@@ -17,7 +17,7 @@ docker run --rm -it -v path/to/project:/build --workdir /build <name> flutter cr
 ```
 
 ## Publish your .desktop to an html
-TODO
+TODO (I have to compile the project first to see what files are created in order to create script that generates html)
 
 ## Before running the executable on your linux machine
 The executable binary can be found in your project under `build/linux/<build mode>/bundle/`. Alongside your executable binary in the bundle directory there are two directories:
