@@ -12,7 +12,7 @@ NOTE: It may be possible to use docker, and if so, some of these dependencies wo
 
 ## Usage
 Run the script with the path to your flutter project as a parameter:
-````bash
+```bash
 main_scr.sh path/to/your/project/
 ```
 After that, you'll have in your current directory the .dmg file along with the .html. If you want to publish your app to a local server, you can use a nginx docker image using the following instructions.
