@@ -7,7 +7,7 @@ After the compilation has completed, a new html file linking to the recently com
 2. If you are outside, move into the directory containing the dockerfile for the next step to work
 3. The following command will create the final image. Give it a name to differentiate it from other images.
 ```bash
-docker build --build-arg proj_path=<path/to/your/project> -t <name> .
+docker build -t <name> .
 ```
 4. If all building was succesful, you'll now have your nginx image containing your html and app files ready for deployment. For that, use the next command, specifying the name you gave to your image in the previous step:
 ```bash
