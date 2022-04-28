@@ -299,7 +299,6 @@ header a {
             <!-- Bienvenidos a la página de descargas de Viafirma. -->
             </p>
             <img src="https://descargas.viafirma.com/afuentes/img/descargas/splash-macosx.png"/>
-            <img class="splash" src="$artifacts_url/launchimage.png" />
           </div>
           <div class="half center appInfo">
             <p class="info threeQuarters">Vas a instalar una aplicación externa a la App Store.</p>
@@ -354,7 +353,6 @@ function distribute_app()
       cp -f $current_dir/index.html $out/$app_url/macos/$version/$environment/index.html
       cp -f $current_dir/icon-1.png $out/$app_url/macos/$version/$environment/icon-1.png
       cp -f $current_dir/icon-2.png $out/$app_url/macos/$version/$environment/icon-2.png
-      #cp -f $current_dir/launchimage.png $out/$app_url/ios/$short_version_string/$environment/launchimage.png
     fi
     
     rm $ci_dir/app.plist
