@@ -415,9 +415,9 @@ EOF
 
 function distribute_app()
 {
-	echo "Distribute app:  $out/$app_url/android/$version_path/$environment/"
+	echo "Distribute app:  $out/$scheme/$os/$ver_path/$environment/$apk_name"
     export
-    firstChar=${out:1}
+    firstChar=${out::1}
     if [[ $firstChar != "/" ]] ;
     then
        echo "ftp transfer to :$out"

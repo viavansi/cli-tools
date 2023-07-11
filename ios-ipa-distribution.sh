@@ -481,7 +481,7 @@ function distribute_app()
 {
     echo "Distribute app:  $out/$app_url/ios/$version_path/$environment/"
     export
-    firstChar=${out:1}
+    firstChar=${out::1}
     if [[ $firstChar != "/" ]] ;
     then
        echo "ftp transfer to :$out"
