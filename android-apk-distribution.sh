@@ -1,9 +1,5 @@
 #!/bin/bash -l
 
-# aapt location, needed to extract the information from the apk. Depending of the aapt version, some steps may fail.
-export PATH=$PATH:/Applications/android-sdk-macosx/build-tools/22.0.0
-
-
 # Configuration
 program_name=$0
 apk=$1
@@ -18,7 +14,7 @@ aab_path=$8
 # Configuration
 project_dir=`pwd`
 os="android"
-aapt_dir="/Applications/android-sdk-macosx/build-tools/29.0.2/aapt"
+aapt_dir="$ANDROID_HOME/build-tools/30.0.3/aapt"
 
 function show_usage() {
   echo "usage: $program_name param1 param2 param3"
