@@ -75,7 +75,7 @@ function archive_app()
 
   echo "scheme" $scheme
 
-  xcodebuild -workspace $workspace -scheme $scheme CODE_SIGN_IDENTITY="$certificate" PROVISIONING_PROFILE="$mobileprovision" OTHER_CODE_SIGN_FLAGS="--keychain $keychain" -archivePath app.xcarchive archive >| output
+  xcodebuild -workspace $workspace -scheme $scheme CODE_SIGN_IDENTITY="$certificate" PROVISIONING_PROFILE="$mobileprovision" OTHER_CODE_SIGN_FLAGS="--keychain $keychain --options=runtime" -archivePath app.xcarchive archive >| output
 
   if [ $? -ne 0 ]
   then
