@@ -332,13 +332,17 @@ function distribute_app()
       echo "ftp transfer to :$out"
       sshpass -p $PUBLISH_PASSWORD ssh -t $PUBLISH_USER@$PUBLISH_SERVER mkdir -p $out/$app_url/windows/$version/$environment/
       sshpass -p $PUBLISH_PASSWORD scp $exe $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/windows/$version/$environment/$app_url.exe
+      sshpass -p $PUBLISH_PASSWORD scp $current_dir/index.html $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/windows/$version/$environment/index.html
       sshpass -p $PUBLISH_PASSWORD scp $app_icon $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/windows/$version/$environment/icon-1.png
     else
       echo "copy transfer to :$out"
       mkdir -p $out/$app_url/windows/$version/$environment/
       cp -f $exe $out/$app_url/windows/$version/$environment/$app_url.exe
+      cp -f $current_dir/index.html $out/$app_url/windows/$version/$environment/index.html
       cp -f $app_icon $out/$app_url/windows/$version/$environment/icon-1.png
     fi
+
+    rm -f $current_dir/index.html
         
     echo "Create URL: $url/$app_url/windows/$version/$environment/"
 
