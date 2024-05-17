@@ -424,7 +424,6 @@ function distribute_app()
        sshpass -p $PUBLISH_PASSWORD scp $apk $PUBLISH_USER@$PUBLISH_SERVER:$out/$scheme/$os/$ver_path/$environment/$apk_name
        sshpass -p $PUBLISH_PASSWORD scp $project_dir/index.html $PUBLISH_USER@$PUBLISH_SERVER:$out/$scheme/$os/$ver_path/$environment/index.html
        sshpass -p $PUBLISH_PASSWORD scp $project_dir/icon.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$scheme/$os/$ver_path/$environment/icon-1.png
-       sshpass -p $PUBLISH_PASSWORD scp $project_dir/icon.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$scheme/$os/$ver_path/$environment/icon-2.png
     else
   		mkdir -p $out/$scheme/$os/$ver_path/$environment
       if [[ $aab_path != "" ]]; then
@@ -433,7 +432,6 @@ function distribute_app()
   		cp -f $apk $out/$scheme/$os/$ver_path/$environment/$apk_name
   		cp -f $project_dir/index.html $out/$scheme/$os/$ver_path/$environment/index.html
   		cp -f $project_dir/icon.png $out/$scheme/$os/$ver_path/$environment/icon-1.png
-  		cp -f $project_dir/icon.png $out/$scheme/$os/$ver_path/$environment/icon-2.png
   		echo "Create OTA dir: $out/$scheme/$os/$ver_path/$environment"
   
 	fi

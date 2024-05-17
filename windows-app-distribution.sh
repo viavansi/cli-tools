@@ -303,7 +303,7 @@ header a {
                 <h2>$app_name</h2>
                 <small>Versión $version</small>
               </div>
-              <a class="button"  href="$url/$app_url/windows/$version/$environment/$app_url.exe">Instalar aplicación</a>
+              <a class="button"  href="$url/$app_url/windows/$version/$environment/${app_url}_installer.exe">Instalar aplicación</a>
               <ul>
                 <li>Aplicación compilada el: `date +%d/%m/%Y`</li>
               </ul>
@@ -331,13 +331,13 @@ function distribute_app()
     then
       echo "ftp transfer to :$out"
       sshpass -p $PUBLISH_PASSWORD ssh -t $PUBLISH_USER@$PUBLISH_SERVER mkdir -p $out/$app_url/windows/$version/$environment/
-      sshpass -p $PUBLISH_PASSWORD scp $exe $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/windows/$version/$environment/$app_url.exe
+      sshpass -p $PUBLISH_PASSWORD scp $exe $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/windows/$version/$environment/${app_url}_installer.exe
       sshpass -p $PUBLISH_PASSWORD scp $current_dir/index.html $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/windows/$version/$environment/index.html
       sshpass -p $PUBLISH_PASSWORD scp $app_icon $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/windows/$version/$environment/icon-1.png
     else
       echo "copy transfer to :$out"
       mkdir -p $out/$app_url/windows/$version/$environment/
-      cp -f $exe $out/$app_url/windows/$version/$environment/$app_url.exe
+      cp -f $exe $out/$app_url/windows/$version/$environment/${app_url}_installer.exe
       cp -f $current_dir/index.html $out/$app_url/windows/$version/$environment/index.html
       cp -f $app_icon $out/$app_url/windows/$version/$environment/icon-1.png
     fi

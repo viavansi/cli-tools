@@ -342,7 +342,6 @@ function distribute_app()
       fi
       sshpass -p $PUBLISH_PASSWORD scp $current_dir/index.html $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/macos/$version/$environment/index.html
       sshpass -p $PUBLISH_PASSWORD scp $current_dir/icon-1.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/macos/$version/$environment/icon-1.png
-      sshpass -p $PUBLISH_PASSWORD scp $current_dir/icon-2.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/macos/$version/$environment/icon-2.png
     else
       echo "copy transfer to :$out"
       mkdir -p $out/$app_url/macos/$version/$environment/
@@ -352,7 +351,6 @@ function distribute_app()
       fi
       cp -f $current_dir/index.html $out/$app_url/macos/$version/$environment/index.html
       cp -f $current_dir/icon-1.png $out/$app_url/macos/$version/$environment/icon-1.png
-      cp -f $current_dir/icon-2.png $out/$app_url/macos/$version/$environment/icon-2.png
     fi
     
     rm $ci_dir/app.plist
