@@ -330,10 +330,10 @@ function distribute_app()
     if [[ $firstChar != "/" ]] ;
     then
       echo "ftp transfer to :$out"
-      sshpass -p $PUBLISH_PASSWORD ssh -t $PUBLISH_USER@$PUBLISH_SERVER mkdir -p $out/$app_url/windows/$version/$environment/
-      sshpass -p $PUBLISH_PASSWORD scp $exe $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/windows/$version/$environment/${app_url}_installer.exe
-      sshpass -p $PUBLISH_PASSWORD scp $current_dir/index.html $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/windows/$version/$environment/index.html
-      sshpass -p $PUBLISH_PASSWORD scp $app_icon $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/windows/$version/$environment/icon-1.png
+      sshpass -p '$PUBLISH_PASSWORD' ssh -t $PUBLISH_USER@$PUBLISH_SERVER mkdir -p $out/$app_url/windows/$version/$environment/
+      sshpass -p '$PUBLISH_PASSWORD' scp $exe $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/windows/$version/$environment/${app_url}_installer.exe
+      sshpass -p '$PUBLISH_PASSWORD' scp $current_dir/index.html $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/windows/$version/$environment/index.html
+      sshpass -p '$PUBLISH_PASSWORD' scp $app_icon $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/windows/$version/$environment/icon-1.png
     else
       echo "copy transfer to :$out"
       mkdir -p $out/$app_url/windows/$version/$environment/
