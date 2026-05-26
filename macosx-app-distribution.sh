@@ -335,13 +335,20 @@ function distribute_app()
     if [[ $firstChar != "/" ]] ;
     then
       echo "ftp transfer to :$out"
-      sshpass -p '$PUBLISH_PASSWORD' ssh -t $PUBLISH_USER@$PUBLISH_SERVER mkdir -p $out/$app_url/macos/$version/$environment/
-      sshpass -p '$PUBLISH_PASSWORD' scp $dmg $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/macos/$version/$environment/$app_url.dmg
+      dest=$out/$app_url/macos/$version/$environment
+      sshpass -p '$PUBLISH_PASSWORD' ssh -t $PUBLISH_USER@$PUBLISH_SERVER mkdir -p $dest/
+      sshpass -p '$PUBLISH_PASSWORD' scp $dmg $PUBLISH_USER@$PUBLISH_SERVER:$dest/$app_url.dmg.tmp
       if [ $pkg ]; then
-        sshpass -p '$PUBLISH_PASSWORD' scp $pkg $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/macos/$version/$environment/$app_url.pkg
+        sshpass -p '$PUBLISH_PASSWORD' scp $pkg $PUBLISH_USER@$PUBLISH_SERVER:$dest/$app_url.pkg.tmp
       fi
-      sshpass -p '$PUBLISH_PASSWORD' scp $current_dir/index.html $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/macos/$version/$environment/index.html
-      sshpass -p '$PUBLISH_PASSWORD' scp $current_dir/icon-1.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/macos/$version/$environment/icon-1.png
+      sshpass -p '$PUBLISH_PASSWORD' scp $current_dir/index.html $PUBLISH_USER@$PUBLISH_SERVER:$dest/index.html.tmp
+      sshpass -p '$PUBLISH_PASSWORD' scp $current_dir/icon-1.png $PUBLISH_USER@$PUBLISH_SERVER:$dest/icon-1.png.tmp
+      sshpass -p '$PUBLISH_PASSWORD' ssh -t $PUBLISH_USER@$PUBLISH_SERVER "
+        mv -f $dest/$app_url.dmg.tmp $dest/$app_url.dmg
+        if [ -f $dest/$app_url.pkg.tmp ]; then mv -f $dest/$app_url.pkg.tmp $dest/$app_url.pkg; fi
+        mv -f $dest/index.html.tmp $dest/index.html
+        mv -f $dest/icon-1.png.tmp $dest/icon-1.png
+      "
     else
       echo "copy transfer to :$out"
       mkdir -p $out/$app_url/macos/$version/$environment/

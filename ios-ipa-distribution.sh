@@ -485,13 +485,22 @@ function distribute_app()
     if [[ $firstChar != "/" ]] ;
     then
        echo "ftp transfer to :$out"
-       sshpass -p '$PUBLISH_PASSWORD' ssh -t $PUBLISH_USER@$PUBLISH_SERVER mkdir -p $out/$app_url/ios/$version_path/$environment/
-       sshpass -p '$PUBLISH_PASSWORD' scp $ipa $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/ios/$version_path/$environment/app.ipa
-       sshpass -p '$PUBLISH_PASSWORD' scp $ci_dir/app.plist $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/ios/$version_path/$environment/app.plist
-       sshpass -p '$PUBLISH_PASSWORD' scp $ci_dir/index.html $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/ios/$version_path/$environment/index.html
-       sshpass -p '$PUBLISH_PASSWORD' scp $ci_dir/icon-1.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/ios/$version_path/$environment/icon-1.png
-       sshpass -p '$PUBLISH_PASSWORD' scp $ci_dir/icon-2.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/ios/$version_path/$environment/icon-2.png
-       sshpass -p '$PUBLISH_PASSWORD' scp $ci_dir/launchimage.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$app_url/ios/$version_path/$environment/launchimage.png
+       dest=$out/$app_url/ios/$version_path/$environment
+       sshpass -p '$PUBLISH_PASSWORD' ssh -t $PUBLISH_USER@$PUBLISH_SERVER mkdir -p $dest/
+       sshpass -p '$PUBLISH_PASSWORD' scp $ipa $PUBLISH_USER@$PUBLISH_SERVER:$dest/app.ipa.tmp
+       sshpass -p '$PUBLISH_PASSWORD' scp $ci_dir/app.plist $PUBLISH_USER@$PUBLISH_SERVER:$dest/app.plist.tmp
+       sshpass -p '$PUBLISH_PASSWORD' scp $ci_dir/index.html $PUBLISH_USER@$PUBLISH_SERVER:$dest/index.html.tmp
+       sshpass -p '$PUBLISH_PASSWORD' scp $ci_dir/icon-1.png $PUBLISH_USER@$PUBLISH_SERVER:$dest/icon-1.png.tmp
+       sshpass -p '$PUBLISH_PASSWORD' scp $ci_dir/icon-2.png $PUBLISH_USER@$PUBLISH_SERVER:$dest/icon-2.png.tmp
+       sshpass -p '$PUBLISH_PASSWORD' scp $ci_dir/launchimage.png $PUBLISH_USER@$PUBLISH_SERVER:$dest/launchimage.png.tmp
+       sshpass -p '$PUBLISH_PASSWORD' ssh -t $PUBLISH_USER@$PUBLISH_SERVER "
+         mv -f $dest/app.ipa.tmp $dest/app.ipa
+         mv -f $dest/app.plist.tmp $dest/app.plist
+         mv -f $dest/index.html.tmp $dest/index.html
+         mv -f $dest/icon-1.png.tmp $dest/icon-1.png
+         mv -f $dest/icon-2.png.tmp $dest/icon-2.png
+         mv -f $dest/launchimage.png.tmp $dest/launchimage.png
+       "
     else
        echo "copy transfer to :$out"
        mkdir -p $out/$app_url/ios/$version_path/$environment/

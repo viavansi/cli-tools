@@ -417,13 +417,20 @@ function distribute_app()
     if [[ $firstChar != "/" ]] ;
     then
        echo "ftp transfer to :$out"
-       sshpass -p '$PUBLISH_PASSWORD' ssh -t $PUBLISH_USER@$PUBLISH_SERVER mkdir -p $out/$scheme/$os/$ver_path/$environment/
+       dest=$out/$scheme/$os/$ver_path/$environment
+       sshpass -p '$PUBLISH_PASSWORD' ssh -t $PUBLISH_USER@$PUBLISH_SERVER mkdir -p $dest/
        if [[ $aab_path != "" ]]; then
-        sshpass -p '$PUBLISH_PASSWORD' scp $aab_path $PUBLISH_USER@$PUBLISH_SERVER:$out/$scheme/$os/$ver_path/$environment/app.aab
+        sshpass -p '$PUBLISH_PASSWORD' scp $aab_path $PUBLISH_USER@$PUBLISH_SERVER:$dest/app.aab.tmp
        fi
-       sshpass -p '$PUBLISH_PASSWORD' scp $apk $PUBLISH_USER@$PUBLISH_SERVER:$out/$scheme/$os/$ver_path/$environment/$apk_name
-       sshpass -p '$PUBLISH_PASSWORD' scp $project_dir/index.html $PUBLISH_USER@$PUBLISH_SERVER:$out/$scheme/$os/$ver_path/$environment/index.html
-       sshpass -p '$PUBLISH_PASSWORD' scp $project_dir/icon.png $PUBLISH_USER@$PUBLISH_SERVER:$out/$scheme/$os/$ver_path/$environment/icon-1.png
+       sshpass -p '$PUBLISH_PASSWORD' scp $apk $PUBLISH_USER@$PUBLISH_SERVER:$dest/$apk_name.tmp
+       sshpass -p '$PUBLISH_PASSWORD' scp $project_dir/index.html $PUBLISH_USER@$PUBLISH_SERVER:$dest/index.html.tmp
+       sshpass -p '$PUBLISH_PASSWORD' scp $project_dir/icon.png $PUBLISH_USER@$PUBLISH_SERVER:$dest/icon-1.png.tmp
+       sshpass -p '$PUBLISH_PASSWORD' ssh -t $PUBLISH_USER@$PUBLISH_SERVER "
+         if [ -f $dest/app.aab.tmp ]; then mv -f $dest/app.aab.tmp $dest/app.aab; fi
+         mv -f $dest/$apk_name.tmp $dest/$apk_name
+         mv -f $dest/index.html.tmp $dest/index.html
+         mv -f $dest/icon-1.png.tmp $dest/icon-1.png
+       "
     else
   		mkdir -p $out/$scheme/$os/$ver_path/$environment
       if [[ $aab_path != "" ]]; then
